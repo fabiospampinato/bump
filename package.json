@@ -1,7 +1,7 @@
 {
   "name": "@fabiospampinato/bump",
   "description": "Bump updates the project's version, updates/creates the changelog, makes the bump commit, tags the bump commit and makes the release to GitHub. Opinionated but configurable.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "bin": {
     "bump": "dist/bin/index.js"
   },
