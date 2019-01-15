@@ -62,11 +62,11 @@ const Changelog = {
 
     } else {
 
-      const bump = await Utils.repository.getVersionProvidersResult ( repoPath, 'getCommitsBumps', 1 );
+      const bumps = await Utils.repository.getVersionProvidersResult ( repoPath, 'getCommitsBumps', 1 );
 
-      if ( !bump.length ) return;
+      if ( !bumps.length ) return;
 
-      const section = Changelog.section.render ( version, bump[0].commits );
+      const section = Changelog.section.render ( version, bumps[0].commits );
 
       return Changelog.section.add ( repoPath, section );
 

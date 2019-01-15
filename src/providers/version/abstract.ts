@@ -4,10 +4,8 @@
 import * as _ from 'lodash';
 import * as path from 'path';
 import * as pify from 'pify';
-import Prompt from 'inquirer-helpers';
 import * as semver from 'semver';
 import * as simpleGit from 'simple-git';
-import Config from '../../config';
 import Utils from '../../utils';
 
 /* ABSTRACT */
@@ -32,18 +30,6 @@ abstract class Abstract {
   init () {}
 
   async bump ( increment: string, version: string | null = null ) {
-
-    /* VARIABLES */
-
-    const commitsBump = await this.getCommitsBumps ( 1 );
-
-    /* CHECKS */
-
-    if ( !commitsBump.length && !Config.force ) { // No changes
-
-      if ( !await Prompt.yesNo ( 'No changes detected, bump anyway?' ) ) return;
-
-    }
 
     /* VERSION */
 
