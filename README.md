@@ -116,6 +116,8 @@ If for instance you don't want to tag your bump commits you can disable the rela
 
 All commands except `release` are enabled by default, I recommed you to check if everything is correct, review the changelog manually as some commits shouldn't be put into the changelog, and then make the release manually with `bump release`.
 
+If you want to review the changes manually, and you want to publish the release to GitHub, I recommend disabling the `tag` command, as it's already handled by GitHub and amending the bump commit would become a bit more annoying.
+
 ## Templates & Tokens
 
 Bump uses templates for generating the strings it needs. Inside those templates you can put tokens, which will be replaced with some value.
