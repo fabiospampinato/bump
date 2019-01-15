@@ -35,19 +35,14 @@ async function version () {
 
   if ( next && !commands.includes ( next ) ) {
 
-    next = _.trimStart ( next, 'v' ); // In order to support things like `v2`
-
     if ( increments.includes ( next ) ) {
 
       increment = next;
 
-    } else if ( /^\d/.test ( next ) ) {
+    } else if ( /^(\d|v\d)/.test ( next ) ) {
 
       increment = 'custom';
-
-      version = semver.coerce ( next );
-
-      if ( !semver.valid ( version ) ) return Utils.exit ( `[version] Invalid version number: "${chalk.bold ( version )}"` );
+      version = next;
 
     } else {
 
@@ -73,9 +68,23 @@ async function version () {
 
       version = await Prompt.input ( 'Enter a version:' );
 
+    }
+
+  }
+
+  if ( version ) {
+
+    const original = version;
+
+    version = _.trimStart ( version, 'v' ); // In order to support things like `v2`
+
+    if ( !semver.valid ( version ) ) {
+
       version = semver.coerce ( version );
 
-      if ( !semver.valid ( version ) ) return Utils.exit ( `[version] Invalid version number: "${chalk.bold ( version )}"` );
+      if ( !version ) return Utils.exit ( `[version] Invalid version number: "${chalk.bold ( original )}"` );
+
+      version = version.version;
 
     }
 
