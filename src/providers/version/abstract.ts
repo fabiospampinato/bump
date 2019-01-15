@@ -122,7 +122,7 @@ abstract class Abstract {
     let bumps: Bump[] = [],
         bump: Bump = { version: '', commits: [] },
         chunkNth = 0,
-        prevVersion = await this.getVersion ();
+        prevVersion;
 
     while ( true ) {
 
@@ -161,6 +161,8 @@ abstract class Abstract {
           bumps.push ( bump );
 
         } else {
+
+          if ( !bump.version ) bump.version = version;
 
           bump.commits.push ( commit );
 
