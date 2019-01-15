@@ -142,7 +142,7 @@ abstract class Abstract {
 
           }
 
-          bump = { version: prevVersion, commits };
+          bump = { version: prevVersion || version, commits };
 
           bumps.push ( bump );
 
