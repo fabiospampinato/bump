@@ -151,7 +151,7 @@ For example this is what the setting may look like if you want to bump the `VERS
 }
 ```
 
-Basically each key defined in the `files` setting is a path relative to the root of your project, the first item in the array is what will become a regex that will match the string to replace (it's important to wrap the actual version string in a capturing block), the second item in the array is the string that will replace the matched one (notice that the `[version]` token will be substituted with the actual version) and the optional third item is the regex flags to use.
+Basically each key defined in the `files` setting is a path relative to the root of your project, the first item in the array is what will become a regex that will match the string to replace (it's important to wrap the actual version string in a capturing block), the second item in the array is the string that will replace the matched one (notice that the `[version]` token will be substituted with the actual version) and the optional third item is the regex flags to use (the default is `gmi`).
 
 If you need to bump more than one version in a single file, using different regexes, just provide an array of arrays instead of a single array.
 
