@@ -36,7 +36,7 @@ const Config = {
     name: 'v[version]' // Template for the name of the tag
   },
   release: {
-    enabled: true, // Release to any enabled release providers
+    enabled: false, // Release to any enabled release providers
     github: {
       enabled: false, // Make a GitHub release
       open: true, // Open the release/draft page

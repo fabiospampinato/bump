@@ -67,7 +67,7 @@ Bump comes with the following default settings:
     "name": "v[version]" // Template for the name of the tag
   },
   "release": {
-    "enabled": true, // Release to any enabled release providers
+    "enabled": false, // Release to any enabled release providers
     "github": {
       "enabled": false, // Make a GitHub release
       "open": true, // Open the release/draft page
@@ -113,6 +113,8 @@ Check out [cash](https://github.com/kenwheeler/cash)'s [bump.json](https://githu
 When running `bump` without explicitly providing a command all the enabled ones are executed.
 
 If for instance you don't want to tag your bump commits you can disable the related command by setting `tag.enabled = false`.
+
+All commands except `release` are enabled by default, I recommed you to check if everything is correct, review the changelog manually as some commits shouldn't be put into the changelog, and then make the release manually with `bump release`.
 
 ## Templates & Tokens
 
