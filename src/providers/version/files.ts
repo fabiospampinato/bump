@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
+import * as stringMatches from 'string-matches';
 import Config from '../../config';
 import Abstract from './abstract';
 
@@ -37,7 +38,7 @@ class Files extends Abstract {
       const datas = _.isArray ( data[0] ) ? data : [data],
             [regexes, replacements, flags] = _.zip ( ...datas ) as string[][];
 
-      this.regexes[basePath] = regexes.map ( ( regex, i ) => new RegExp ( regex, _.get ( flags, i, 'gm' ) ) );
+      this.regexes[basePath] = regexes.map ( ( regex, i ) => new RegExp ( regex, _.get ( flags, i, 'gmi' ) ) );
       this.replacements[basePath] = replacements;
 
     });
@@ -85,9 +86,14 @@ class Files extends Abstract {
 
       for ( let ri = 0, rl = this.regexes[basePath].length; ri < rl; ri++ ) {
 
-        const match = content.match ( this.regexes[basePath][ri] ) as RegExpMatchArray;
+        const re = this.regexes[basePath][ri],
+              matches = stringMatches ( content, re );
 
-        if ( match ) return _.last ( match ) as string;
+        for ( let match of matches ) {
+
+          if ( match && match[1] ) return match[1] as string;
+
+        }
 
       }
 

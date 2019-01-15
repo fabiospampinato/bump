@@ -10,8 +10,8 @@ class NPM extends Files {
   getFiles () {
 
     return {
-      'package.json': ['"version":\\s*"([^"]*)"', '"version": "[version]"', 'm'],
-      'package-lock.json': ['"version":\\s*"([^"]*)"', '"version": "[version]"', 'm']
+      'package.json': ['"version":\\s*"([^"]*?)"', '"version": "[version]"', "mi"],
+      'package-lock.json': ['"version":\\s*"([^"]*?)"', '"version": "[version]"', "mi"]
     };
 
   }
