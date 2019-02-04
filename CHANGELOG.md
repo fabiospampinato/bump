@@ -1,3 +1,7 @@
+### Version 1.0.3
+- Added a `—no-scripts` option
+- Making the first option “no” rather than “yes”
+
 ### Version 1.0.2
 - Files provider: ensuring the version number is properly extracted even when using global regexes
 - Readme: mentioning the default regex flags
