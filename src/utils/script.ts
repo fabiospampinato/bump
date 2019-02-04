@@ -14,6 +14,8 @@ const Script = {
 
   async run ( name: string ) {
 
+    if ( !Config.scripts.enabled ) return;
+
     const script = Config.scripts[name];
 
     if ( !script ) return;
