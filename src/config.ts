@@ -55,6 +55,7 @@ const Config = {
     }
   },
   scripts: {
+    enabled: true, // Run the scripts
     prebump: '', // Script to execute before bumping the version
     postbump: '', // Script to execute after bumping the version
     prechangelog: '', // Script to execute before updating the changelog
@@ -128,6 +129,8 @@ function initDynamic () {
   });
 
   /* SCRIPTS */
+
+  Config.scripts.enabled = [argv.scripts, Config.scripts.enabled].find ( _.isBoolean ) as boolean;
 
   const scripts = Object.keys ( Config.scripts );
 
