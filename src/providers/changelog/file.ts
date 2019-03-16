@@ -126,10 +126,12 @@ const Changelog = {
       if ( Config.changelog.commit ) {
 
         commits.reverse ().forEach ( commit => {
-          
+
           if ( commit.isBump ) return;
-          
-          if (commit.message.toLowerCase().includes('merge')) return;
+
+          const mergeRe = /^(Merge PR|Merge pull request|Merge branch) /gi;
+
+          if ( mergeRe.test ( commit.message ) ) return;
 
           const {hash, date, message, author_name, author_email} = commit,
                 messageCleaned = message.replace ( / \(HEAD\)$/i, '' ).replace ( / \(HEAD -> [^)]+\)$/i, '' ).replace ( / \(tag: [^)]+\)$/i, '' )
