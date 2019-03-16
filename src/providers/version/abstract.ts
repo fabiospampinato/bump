@@ -110,6 +110,7 @@ abstract class Abstract {
         chunkNth = 0,
         prevVersion;
 
+    whileloop:
     while ( true ) {
 
       const commits = await this.getCommitsChunk ( chunkNth, 50 );
@@ -124,7 +125,7 @@ abstract class Abstract {
 
           const commitLast = bump.commits.pop () as Commit;
 
-          if ( bumps.length >= limit ) break;
+          if ( bumps.length >= limit ) break whileloop;
 
           const commits = [commit];
 
@@ -157,8 +158,6 @@ abstract class Abstract {
         prevVersion = version;
 
       }
-
-      if ( bumps.length >= limit ) break;
 
       chunkNth++;
 
