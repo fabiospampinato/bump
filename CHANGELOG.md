@@ -1,3 +1,7 @@
+### Version 1.0.4
+- Changelog: improved merge commit detection
+- Ensuring versions with an arbitrary number of commits are supported
+
 ### Version 1.0.3
 - Added a `—no-scripts` option
 - Making the first option “no” rather than “yes”
