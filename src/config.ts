@@ -136,6 +136,8 @@ function initDynamic () {
 
   scripts.forEach ( name => {
 
+    if ( !_.isString ( Config.scripts[name] ) ) return;
+
     Config.scripts[name] = [argv[name], Config.scripts[name]].find ( _.isString );
 
   });
