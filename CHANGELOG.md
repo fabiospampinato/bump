@@ -1,3 +1,6 @@
+### Version 1.0.5
+- Fixed a regression that caused scripts to be disabled by default
+
 ### Version 1.0.4
 - Changelog: improved merge commit detection
 - Ensuring versions with an arbitrary number of commits are supported
