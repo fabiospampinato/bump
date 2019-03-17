@@ -104,7 +104,11 @@ async function version () {
 
   Utils.log ( 'Bumping the version...' );
 
+  await Utils.script.run ( 'prebump' );
+
   await Promise.all ( providers.map ( provider => provider.bump ( increment, version ) ) );
+
+  await Utils.script.run ( 'postbump' );
 
 }
 

@@ -45,11 +45,7 @@ abstract class Abstract {
 
     /* BUMP */
 
-    await Utils.script.run ( 'prebump' );
-
     await this.updateVersion ( version );
-
-    await Utils.script.run ( 'postbump' );
 
   }
 
