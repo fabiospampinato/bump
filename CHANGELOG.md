@@ -1,3 +1,6 @@
+### Version 1.0.6
+- Ensuring pre/post-bump scripts are only run once
+
 ### Version 1.0.5
 - Fixed a regression that caused scripts to be disabled by default
 
