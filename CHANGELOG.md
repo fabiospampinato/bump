@@ -1,3 +1,7 @@
+### Version 1.1.0
+- Updated octokit
+- Added support for the `GITHUB_TOKEN` environment variable
+
 ### Version 1.0.6
 - Ensuring pre/post-bump scripts are only run once
 
