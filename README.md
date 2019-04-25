@@ -105,6 +105,7 @@ You can override them in multiple ways:
 - **Computer-level settings**: Place your computer-level settings inside `~/.bump.json` to override the default ones. You should put auth tokens here.
 - **Project-level settings**: Place your project-level settings at the root of your project in a file named `bump.json`, these settings also override computer-level settings.
 - **Dynamic settings**: You can pass an arbitrary settings object via the `--config` CLI option, these settings have the highest priority. Some other specific CLI options are supported too (i.e. `--silent`).
+- **Environment variables**: the following environment variables are supported too: `GITHUB_TOKEN`.
 
 Check out [cash](https://github.com/kenwheeler/cash)'s [bump.json](https://github.com/kenwheeler/cash/blob/master/bump.json) as an example.
 

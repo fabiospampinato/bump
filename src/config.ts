@@ -146,6 +146,16 @@ function initDynamic () {
 
 initDynamic ();
 
+/* INIT ENVIRONMENT */
+
+function initEnvironment () {
+
+  if ( process.env.GITHUB_TOKEN ) Config.release.github.token = process.env.GITHUB_TOKEN;
+
+}
+
+initEnvironment ();
+
 /* EXPORT */
 
 export default Config;
