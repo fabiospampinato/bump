@@ -43,7 +43,7 @@ const Config = {
       draft: true, // Mark it as a draft
       prerelease: false, // Mark it as a prerelease
       files: [], // Globs of files to attach to the release
-      token: '' // GitHub OAuth token with `public_repo` priviledge
+      token: ('' || process.env.GITHUB_TOKEN) // GitHub OAuth token with `public_repo` priviledge
     }
   },
   tokens: {

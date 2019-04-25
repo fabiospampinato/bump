@@ -22,12 +22,9 @@ const GitHub = {
     if ( !Config.release.github.token ) return Utils.exit ( '[release] Missing GitHub token' );
 
     const cwd = repoPath,
-          github = new octokit ();
-
-    github.authenticate ({
-      type: 'token',
-      token: Config.release.github.token
-    });
+          github = new octokit ({
+            auth: Config.release.github.token
+          });
 
     try {
 
