@@ -1,3 +1,6 @@
+### Version 1.1.1
+- Fixed a typo
+
 ### Version 1.1.0
 - Added support for the `GITHUB_TOKEN` environment variable
 
