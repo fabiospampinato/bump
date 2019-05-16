@@ -18,7 +18,7 @@ async function release () {
 
   if ( Config.release.github.enabled ) {
 
-    Utils.log ( 'Relasing to GitHub...' );
+    Utils.log ( 'Releasing to GitHub...' );
 
     await GitHub.do ( repoPath, version );
 
