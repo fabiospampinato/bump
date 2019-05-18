@@ -1,3 +1,6 @@
+### Version 1.1.2
+- Properly importing types
+
 ### Version 1.1.1
 - Fixed a typo
 
