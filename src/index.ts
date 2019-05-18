@@ -1,6 +1,7 @@
 
 /* IMPORT */
 
+import {Options} from './types';
 import Commands from './commands';
 import Config from './config';
 

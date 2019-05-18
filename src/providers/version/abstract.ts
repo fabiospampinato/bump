@@ -6,6 +6,7 @@ import * as path from 'path';
 import * as pify from 'pify';
 import * as semver from 'semver';
 import * as simpleGit from 'simple-git';
+import {Bump, Commit} from '../../types';
 import Utils from '../../utils';
 
 /* ABSTRACT */

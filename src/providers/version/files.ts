@@ -3,6 +3,7 @@
 
 import * as _ from 'lodash';
 import * as stringMatches from 'string-matches';
+import {Commit} from '../../types';
 import Config from '../../config';
 import Abstract from './abstract';
 

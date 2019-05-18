@@ -22,3 +22,7 @@ type Options = {
   tag?: boolean,
   release?: boolean
 };
+
+/* EXPORT */
+
+export {Bump, Commit, Options};

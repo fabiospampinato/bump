@@ -7,6 +7,7 @@ import * as opn from 'opn';
 import * as path from 'path';
 import Prompt from 'inquirer-helpers';
 import * as stringMatches from 'string-matches';
+import {Commit} from '../../types';
 import Config from '../../config';
 import Utils from '../../utils';
 
