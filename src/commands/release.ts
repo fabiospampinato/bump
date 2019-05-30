@@ -12,7 +12,7 @@ async function release () {
   const repoPath = await Utils.repository.getPath (),
         version = await Utils.repository.getVersion ( repoPath );
 
-  if ( !Config.release.github.owner || !Config.release.github.repo || !repoPath || !version ) return Utils.exit ( '[release] Unsupported repository' );
+  if ( !repoPath || !version ) return Utils.exit ( '[release] Unsupported repository' );
 
   await Utils.script.run ( 'prerelease' );
 
