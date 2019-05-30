@@ -74,7 +74,9 @@ Bump comes with the following default settings:
       "draft": true, // Mark it as a draft
       "prerelease": false, // Mark it as a prerelease
       "files": [], // Globs of files to attach to the release
-      "token": "" // GitHub OAuth token with `public_repo` priviledge
+      "token": "", // GitHub OAuth token with `public_repo` priviledge
+      "owner": '', // GitHub repository owner
+      "repo": '' // GitHub repository name
     }
   },
   "tokens": {
