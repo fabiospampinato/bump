@@ -28,8 +28,8 @@ const GitHub = {
 
     try {
 
-      const owner = username ({ cwd }),
-            repo = path.basename ( cwd ),
+      const owner = Config.release.github.owner || username ({ cwd }),
+            repo = Config.release.github.repo || path.basename ( cwd ),
             tag = Utils.template.render ( Config.tag.name, {version} );
 
       const release = await github.repos.createRelease ({
