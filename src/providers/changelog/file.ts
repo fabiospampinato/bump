@@ -138,7 +138,7 @@ const Changelog = {
                 messageCleaned = message.replace ( / \(HEAD\)$/i, '' ).replace ( / \(HEAD -> [^)]+\)$/i, '' ).replace ( / \(tag: [^)]+\)$/i, '' )
 
           const commitTokens = _.extend ( {}, tokens, {
-            date: moment ( date ).format ( Config.tokens.date.format ),
+            date: moment ( new Date ( date ) ).format ( Config.tokens.date.format ),
             message: messageCleaned,
             hash,
             hash4: hash.slice ( 0, 4 ),
