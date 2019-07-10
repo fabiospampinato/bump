@@ -1,3 +1,6 @@
+### Version 1.2.1
+- Updated moment
+
 ### Version 1.2.0
 - Added support for releasing to an arbitrary GitHub repository
 
