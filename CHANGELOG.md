@@ -1,3 +1,9 @@
+### Version 1.2.1
+- Readme: using consistent quotes
+- Updated moment dep to ^2.19.3
+- Fixed moment deprecation warning
+- Updated moment
+
 ### Version 1.2.0
 - Added support for releasing to an arbitrary GitHub repository
 
