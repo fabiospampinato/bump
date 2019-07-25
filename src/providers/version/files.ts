@@ -104,7 +104,7 @@ class Files extends Abstract {
 
   async updateVersion ( version: string ) {
 
-    await Promise.all ( this.basePaths.map ( async ( basePath, i ) => {
+    for ( let basePath of this.basePaths ) {
 
       const content = await this.getContent ( basePath );
 
@@ -120,9 +120,9 @@ class Files extends Abstract {
 
       });
 
-      this.setContent ( basePath, newContent );
+      await this.setContent ( basePath, newContent );
 
-    }));
+    }
 
   }
 
