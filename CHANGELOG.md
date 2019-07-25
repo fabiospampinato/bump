@@ -1,3 +1,7 @@
+### Version 1.2.2
+- Ensuring there are no conflicts when updating the same files multiple times
+- Improved version detection
+
 ### Version 1.2.1
 - Updated moment
 
