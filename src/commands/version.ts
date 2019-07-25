@@ -94,7 +94,7 @@ async function version () {
 
   const bumps = await Utils.repository.getVersionProvidersResult ( repoPath, 'getCommitsBumps', 1 );
 
-  if ( ( !bumps.length || ( bumps.length === 1 && !bumps[0].commits.length ) ) && !Config.force ) { // No changes
+  if ( ( !bumps || !bumps.length || ( bumps.length === 1 && !bumps[0].commits.length ) ) && !Config.force ) { // No changes
 
     if ( !await Prompt.noYes ( 'No changes detected, bump anyway?' ) ) return process.exit ();
 

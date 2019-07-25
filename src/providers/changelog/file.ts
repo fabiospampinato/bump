@@ -29,7 +29,7 @@ const Changelog = {
 
     const bumps = await Utils.repository.getVersionProvidersResult ( repoPath, 'getCommitsBumps' );
 
-    if ( !bumps.length ) return Utils.exit ( '[changelog] No commits found' );
+    if ( !bumps || !bumps.length ) return Utils.exit ( '[changelog] No commits found' );
 
     const sections = bumps.map ( bump => Changelog.section.render ( bump.version, bump.commits ) ),
           content = sections.join ( '' );
@@ -65,7 +65,7 @@ const Changelog = {
 
       const bumps = await Utils.repository.getVersionProvidersResult ( repoPath, 'getCommitsBumps', 1 );
 
-      if ( !bumps.length ) return;
+      if ( !bumps || !bumps.length ) return;
 
       const section = Changelog.section.render ( version, bumps[0].commits );
 

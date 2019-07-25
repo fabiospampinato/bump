@@ -6,7 +6,7 @@ import NPM from './npm';
 
 /* VERSION */
 
-const Version = [Files, NPM];
+const Version = [NPM, Files];
 
 /* EXPORT */
 

@@ -100,7 +100,7 @@ abstract class Abstract {
 
   }
 
-  async getCommitsBumps ( limit: number = Infinity ): Promise<Bump[]> { // Get "limit" number of groups of commits grouped by version
+  async getCommitsBumps ( limit: number = Infinity ): Promise<Bump[] | undefined> { // Get "limit" number of groups of commits grouped by version
 
     let bumps: Bump[] = [],
         bump: Bump = { version: '', commits: [] },
@@ -117,6 +117,8 @@ abstract class Abstract {
       for ( let commit of commits ) {
 
         const version = await this.getVersionByCommit ( commit );
+
+        if ( !semver.valid ( version ) ) return;
 
         if ( version !== prevVersion ) {
 
