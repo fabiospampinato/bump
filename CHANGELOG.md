@@ -1,3 +1,12 @@
+### Version 2.0.0
+- Release: uploading files in parallel, improving bandwidth utilization
+  - In a benchmark I did this lowered the time required to upload all files by ~30%
+- Release: added a `release.github.filesNr` setting, if set bump will wait and watch the file system until all expected files are found
+  - This enables bump to be run in parallel with your build script, bump will upload files as soon as they are available
+  - This optimization therefore potentially makes the time required to upload assets 0, compared to the default approach
+- Changed glob engine, replaced [globby](https://github.com/sindresorhus/globby) with [picomatch](https://github.com/micromatch/picomatch)
+  - You might need to update your globs accordingly
+
 ### Version 1.2.2
 - Ensuring there are no conflicts when updating the same files multiple times
 - Improved version detection
