@@ -23,6 +23,13 @@ type Options = {
   release?: boolean
 };
 
+type UploaderOptions<UploadResult, CancelResult> = {
+  globs: string[],
+  filesNr: number,
+  upload: ( filePath: string ) => Promise<UploadResult>,
+  cancel: ( filePath: string, asset: UploadResult ) => Promise<CancelResult>
+};
+
 /* EXPORT */
 
-export {Bump, Commit, Options};
+export {Bump, Commit, Options, UploaderOptions};

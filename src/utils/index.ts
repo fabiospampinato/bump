@@ -9,6 +9,7 @@ import log from './log';
 import repository from './repository';
 import script from './script';
 import template from './template';
+import Uploader from './uploader';
 
 /* UTILS */
 
@@ -20,7 +21,8 @@ const Utils = {
   log,
   repository,
   script,
-  template
+  template,
+  Uploader
 };
 
 /* EXPORT */

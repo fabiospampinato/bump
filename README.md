@@ -74,6 +74,7 @@ Bump comes with the following default settings:
       "draft": true, // Mark it as a draft
       "prerelease": false, // Mark it as a prerelease
       "files": [], // Globs of files to attach to the release
+      "filesNr": -1, // Number of files expected, if provided bump will watch the file system until it has found the expected number of files. It's recommended to set this value
       "token": "", // GitHub OAuth token with `public_repo` priviledge
       "owner": "", // GitHub repository owner
       "repo": "" // GitHub repository name
@@ -164,6 +165,7 @@ If you need to bump more than one version in a single file, using different rege
 
 - **Commits messages**: Spend some extra seconds to write descriptive commits messages, with no extra effort you'll be improving your changelogs as well. If you're already doing this, just enjoy the extra free time!
 - **Changelogs**: Changelogs are cool, if your existing project doesn't have one simply run `bump changelog` to generate it.
+- **Parallelize releases**: By setting `release.github.filesNr` bump will watch the file system until it has found the expected number of files, allowing you to run both `bump release` and the script that will generate those files in parallel, speeding up the process.
 - **Review**: Setting `commit.enabled = false` and `changelog.open = true` allows you to review your changelog before committing it. Alternatively you can also auto-commit it, review it later, and in case amend the previous commit.
 - **Scripts**: Scripts can be used for building/testing/deployments/etc. For example: a `prebump` script could be used for running tests, a `postbump` script could be used for compiling your project for production, a `postcommit` script could be used for pushing the commit to origin.
 

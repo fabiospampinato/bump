@@ -1,9 +1,7 @@
 
 /* IMPORT */
 
-import chalk from 'chalk';
 import * as fs from 'fs';
-import * as globby from 'globby';
 import * as mime from 'mime-types';
 import * as octokit from '@octokit/rest';
 import * as opn from 'opn';
@@ -11,6 +9,7 @@ import * as path from 'path';
 import * as username from 'git-username';
 import Config from '../../config';
 import Utils from '../../utils';
+import {UploaderOptions} from '../../types';
 import Changelog from '../changelog/file';
 
 /* COMMIT */
@@ -50,17 +49,11 @@ const GitHub = {
 
       if ( Config.release.github.files.length ) {
 
-        const filePaths = await globby ( Config.release.github.files, { cwd, absolute: true } );
-
-        if ( filePaths.length ) {
-
-          Utils.log ( `Uploading ${filePaths.length} files...`);
-
-          for ( let filePath of filePaths ) {
-
-            Utils.log ( `Uploading "${chalk.bold ( filePath )}"` );
-
-            await github.repos.uploadReleaseAsset ({
+        const options: UploaderOptions<octokit.Response<octokit.ReposUpdateReleaseAssetResponseUploader>, octokit.Response<octokit.ReposDeleteReleaseAssetResponse>> = {
+          globs: Config.release.github.files,
+          filesNr: Config.release.github.filesNr,
+          upload ( filePath: string ) {
+            return github.repos.uploadReleaseAsset ({
               url: release.data.upload_url,
               name: path.basename ( filePath ),
               file: fs.createReadStream ( filePath ),
@@ -69,10 +62,19 @@ const GitHub = {
                 'content-length': fs.statSync ( filePath ).size
               }
             });
-
+          },
+          cancel ( filePath: string, asset: octokit.Response<octokit.ReposUpdateReleaseAssetResponseUploader> ) {
+            return github.repos.deleteReleaseAsset ({
+              owner,
+              repo,
+              asset_id: asset.data.id
+            });
           }
-
         }
+
+        const uploader = new Utils.Uploader ( options );
+
+        await uploader.start ();
 
       }
 
