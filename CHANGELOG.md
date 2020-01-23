@@ -1,3 +1,6 @@
+### Version 2.0.0
+- Improved parallelization — Watching the file system for artifacts to release
+
 ### Version 1.2.2
 - Ensuring there are no conflicts when updating the same files multiple times
 - Improved version detection
