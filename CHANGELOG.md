@@ -1,3 +1,8 @@
+### Version 2.0.1
+- Update .github/FUNDING.yml
+- Deleted repo-level github funding.yml
+- Trimmed down dependencies tree
+
 ### Version 2.0.0
 - Release: uploading files in parallel, improving bandwidth utilization
   - In a benchmark I did this lowered the time required to upload all files by ~30%
