@@ -2,10 +2,10 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
-import chalk from 'chalk';
 import Prompt from 'inquirer-helpers';
 import * as minimist from 'minimist';
 import * as semver from 'semver';
+import {color} from 'specialist';
 import Config from '../config';
 import Utils from '../utils';
 
@@ -46,7 +46,7 @@ async function version () {
 
     } else {
 
-      return Utils.exit ( `[version] Invalid version number or version increment: "${chalk.bold ( next )}"` );
+      return Utils.exit ( `[version] Invalid version number or version increment: "${color.bold ( next )}"` );
 
     }
 
@@ -82,7 +82,7 @@ async function version () {
 
       version = semver.coerce ( version );
 
-      if ( !version ) return Utils.exit ( `[version] Invalid version number: "${chalk.bold ( original )}"` );
+      if ( !version ) return Utils.exit ( `[version] Invalid version number: "${color.bold ( original )}"` );
 
       version = version.version;
 

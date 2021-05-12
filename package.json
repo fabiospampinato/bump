@@ -3,10 +3,10 @@
   "description": "Bump updates the project's version, updates/creates the changelog, makes the bump commit, tags the bump commit and makes the release to GitHub. Opinionated but configurable.",
   "version": "2.0.0",
   "bin": {
-    "bump": "dist/bin/index.js"
+    "bump": "dist/src/bin/index.js"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc --skipLibCheck && tstei",
@@ -36,10 +36,7 @@
   ],
   "dependencies": {
     "@octokit/rest": "^16.25.0",
-    "@types/lodash": "^4.14.119",
-    "@types/node": "^10.9.4",
     "caporal": "git://github.com/fabiospampinato/Caporal.js#cf0f5eeefb2e04cc07798bf4a45d6bda5e2a2f63",
-    "chalk": "^2.4.1",
     "chokidar": "^3.3.1",
     "execa": "^1.0.0",
     "find-up": "^2.1.0",
@@ -53,15 +50,16 @@
     "opn": "^5.4.0",
     "pify": "^3.0.0",
     "promise-resolve-timeout": "^1.2.0",
-    "read-pkg-up": "^2.0.0",
     "semver": "^5.4.1",
     "simple-git": "^1.77.0",
+    "specialist": "^0.3.0",
     "string-matches": "^1.1.3",
     "touch": "^3.1.0",
-    "update-notifier": "^2.2.0",
     "window-size": "^1.1.1"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.119",
+    "@types/node": "^10.9.4",
     "rimraf": "^2.6.3",
     "typescript": "^3.7.5",
     "typescript-transform-export-interop": "^1.0.2"

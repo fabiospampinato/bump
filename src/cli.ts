@@ -2,9 +2,8 @@
 /* IMPORT */
 
 import * as Caporal from 'caporal';
-import chalk from 'chalk';
-import * as readPkg from 'read-pkg-up';
-import * as updateNotifier from 'update-notifier';
+import {color, updater} from 'specialist';
+import {name, version} from '../package.json';
 import bump from '.';
 
 const caporal = Caporal as any;
@@ -15,11 +14,9 @@ async function CLI () {
 
   /* APP */
 
-  const {pkg} = await readPkg ({ cwd: __dirname });
+  updater ({ name, version });
 
-  updateNotifier ({ pkg }).notify ();
-
-  const app = caporal.version ( pkg.version );
+  const app = caporal.version ( version );
 
   /* COMMANDS */
 
@@ -90,11 +87,11 @@ async function CLI () {
 
   const command = app['_defaultCommand'];
   const helpLines = [
-    `bump ${chalk.yellow ( 'minor' )}`,
-    `bump ${chalk.yellow ( '1.0.1' )}`,
-    `bump ${chalk.green ( '--config' )} ${chalk.blue ( './conf/bump.json' )} ${chalk.green ( '--force' )} ${chalk.green ( '--silent' )}`,
-    `bump ${chalk.magenta ( 'tag' )} ${chalk.green ( '--posttag' )} ${chalk.blue ( '"echo Done!"' )}`,
-    `bump ${chalk.magenta ( 'release' )} ${chalk.green ( '--prerelease' )} ${chalk.blue ( '"npm run build"' )} ${chalk.green ( '--postrelease' )} ${chalk.blue ( '"npm publish"' )}`
+    `bump ${color.yellow ( 'minor' )}`,
+    `bump ${color.yellow ( '1.0.1' )}`,
+    `bump ${color.green ( '--config' )} ${color.blue ( './conf/bump.json' )} ${color.green ( '--force' )} ${color.green ( '--silent' )}`,
+    `bump ${color.magenta ( 'tag' )} ${color.green ( '--posttag' )} ${color.blue ( '"echo Done!"' )}`,
+    `bump ${color.magenta ( 'release' )} ${color.green ( '--prerelease' )} ${color.blue ( '"npm run build"' )} ${color.green ( '--postrelease' )} ${color.blue ( '"npm publish"' )}`
   ];
 
   command.help ( helpLines.join ( '\n' ), { name: 'USAGE - ADVANCED' } );

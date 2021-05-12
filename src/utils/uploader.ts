@@ -1,10 +1,10 @@
 
 /* IMPORT */
 
-import chalk from 'chalk';
 import * as chokidar from 'chokidar';
 import {FSWatcher} from 'chokidar';
 import delay from 'promise-resolve-timeout';
+import {color} from 'specialist';
 import file from './file';
 import log from './log';
 import {UploaderOptions} from '../types';
@@ -74,7 +74,7 @@ class Uploader<UploadResult, CancelResult> {
 
     if ( !file.exists ( filePath ) ) return;
 
-    log ( `Uploading "${chalk.bold ( filePath )}"` );
+    log ( `Uploading "${color.bold ( filePath )}"` );
 
     this.uploadingNr++;
 
@@ -99,7 +99,7 @@ class Uploader<UploadResult, CancelResult> {
 
     if ( !this.isUploading ( filePath ) ) return this.upload ( filePath );
 
-    log ( `Reuploading "${chalk.bold ( filePath )}" because it changed on disk` );
+    log ( `Reuploading "${color.bold ( filePath )}" because it changed on disk` );
 
     this.uploadingNr++;
     this.uploadedNr--;
