@@ -1,3 +1,6 @@
+### Version 2.1.0
+- Added a "changelog.ask" configuration option controlling whether the user is asked if they want a changelog created
+
 ### Version 2.0.1
 - Update .github/FUNDING.yml
 - Deleted repo-level github funding.yml
