@@ -50,6 +50,7 @@ Bump comes with the following default settings:
     "increments": ["major", "minor", "patch", "premajor", "preminor", "prepatch", "prerelease", "custom"] // List of available increments to pick from
   },
   "changelog": {
+    "ask": true, // Whether to ask to create a changelog or not
     "enabled": true, // Enable changelog auto-updates
     "create": false, // Create the changelog file if it doesn"t exist
     "open": true, // Open the changelog file after bumping

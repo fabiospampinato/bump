@@ -55,7 +55,7 @@ const Changelog = {
 
       if ( !Config.changelog.create && Config.force ) return;
 
-      if ( Config.changelog.create || await Prompt.noYes ( 'No changelog found, do you want to create it?' ) ) {
+      if ( Config.changelog.create || ( Config.changelog.ask && await Prompt.noYes ( 'No changelog found, do you want to create it?' ) ) ) {
 
         await Changelog.init ( repoPath );
 
