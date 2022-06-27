@@ -1,3 +1,7 @@
+### Version 2.1.1
+- Ensuring the right version of @octokit/rest is used
+- Fixed a bug where duplicate headings for the same version were generated
+
 ### Version 2.1.0
 - Added a "changelog.ask" configuration option controlling whether the user is asked if they want a changelog created
 
