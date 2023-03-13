@@ -1,3 +1,9 @@
+### Version 2.1.2
+- Lowercased readme file
+- Lowercased changelog file
+- Lowercased license file
+- Updated Caporal dependency definition, for compatibility with Yarn and pnpm
+
 ### Version 2.1.1
 - Ensuring the right version of @octokit/rest is used
 - Fixed a bug where duplicate headings for the same version were generated
