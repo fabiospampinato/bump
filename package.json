@@ -36,7 +36,7 @@
   ],
   "dependencies": {
     "@octokit/rest": "16.25.0",
-    "caporal": "git://github.com/fabiospampinato/Caporal.js#cf0f5eeefb2e04cc07798bf4a45d6bda5e2a2f63",
+    "caporal": "https://github.com/fabiospampinato/Caporal.js#cf0f5eeefb2e04cc07798bf4a45d6bda5e2a2f63",
     "chokidar": "^3.3.1",
     "execa": "^1.0.0",
     "find-up": "^2.1.0",
