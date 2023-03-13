@@ -1,12 +1,12 @@
 {
   "name": "@fabiospampinato/bump",
   "description": "Bump updates the project's version, updates/creates the changelog, makes the bump commit, tags the bump commit and makes the release to GitHub. Opinionated but configurable.",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "bin": {
-    "bump": "dist/bin/index.js"
+    "bump": "dist/src/bin/index.js"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc --skipLibCheck && tstei",
