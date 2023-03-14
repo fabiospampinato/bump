@@ -1,17 +1,18 @@
 
 /* IMPORT */
 
-import config from './config';
-import exit from './exit';
-import file from './file';
-import git from './git';
-import log from './log';
-import repository from './repository';
-import script from './script';
-import template from './template';
-import Uploader from './uploader';
+import config from '~/utils/config';
+import exit from '~/utils/exit';
+import file from '~/utils/file';
+import git from '~/utils/git';
+import log from '~/utils/log';
+import repository from '~/utils/repository';
+import script from '~/utils/script';
+import shell from '~/utils/shell';
+import template from '~/utils/template';
+import Uploader from '~/utils/uploader';
 
-/* UTILS */
+/* MAIN */
 
 const Utils = {
   config,
@@ -21,6 +22,7 @@ const Utils = {
   log,
   repository,
   script,
+  shell,
   template,
   Uploader
 };

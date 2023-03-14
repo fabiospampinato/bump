@@ -1,16 +1,16 @@
 
 /* IMPORT */
 
-import Config from '../config';
-import Changelog from '../providers/changelog/file';
-import Utils from '../utils';
+import Config from '~/config';
+import Changelog from '~/providers/changelog/file';
+import Utils from '~/utils';
 
-/* CHANGELOG */
+/* MAIN */
 
-async function changelog () {
+const changelog = async (): Promise<void> => {
 
-  const repoPath = await Utils.repository.getPath (),
-        version = await Utils.repository.getVersion ( repoPath );
+  const repoPath = await Utils.repository.getPath ();
+  const version = await Utils.repository.getVersion ( repoPath );
 
   if ( !repoPath || !version ) return Utils.exit ( '[changelog] Unsupported repository' );
 
@@ -28,7 +28,7 @@ async function changelog () {
 
   }
 
-}
+};
 
 /* EXPORT */
 

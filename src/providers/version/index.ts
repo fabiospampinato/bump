@@ -1,10 +1,10 @@
 
 /* IMPORT */
 
-import Files from './files';
-import NPM from './npm';
+import Files from '~/providers/version/files';
+import NPM from '~/providers/version/npm';
 
-/* VERSION */
+/* MAIN */
 
 const Version = [NPM, Files];
 

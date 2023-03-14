@@ -1,15 +1,17 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 
-/* CONFIG */
+/* MAIN */
 
 const Config = {
 
-  merge ( object, ...sources ) {
+  /* API */
 
-   return _.mergeWith ( object, ...sources, ( prev, next ) => {
+  merge: <T> ( target: T, other: any ): T => {
+
+   return _.mergeWith ( target, other, ( prev, next ) => {
 
      if ( !_.isArray ( prev ) || !_.isArray ( next ) ) return;
 

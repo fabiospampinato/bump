@@ -1,18 +1,21 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
-import * as execa from 'execa';
+import _ from 'lodash';
+import process from 'node:process';
 import {color} from 'specialist';
-import * as windowSize from 'window-size';
-import Config from '../config';
-import Utils from '../utils';
+import Config from '~/config';
+import exit from '~/utils/exit';
+import log from '~/utils/log';
+import Shell from '~/utils/shell';
 
-/* SCRIPT */
+/* MAIN */
 
 const Script = {
 
-  async run ( name: string ) {
+  /* API */
+
+  run: async ( name: string ): Promise<void> => {
 
     if ( !Config.scripts.enabled ) return;
 
@@ -20,21 +23,21 @@ const Script = {
 
     if ( !script ) return;
 
-    const size = _.get ( windowSize.get (), 'width', 40 );
+    const size = ( process.stdout.getWindowSize?.()?.[0] || 25 ) - 1;
 
     try {
 
-      Utils.log ( color.yellow ( `┌─ script:${name} ${'─'.repeat ( size - 12 - name.length )}┐` ) );
+      log ( color.yellow ( `┌─ script:${name} ${'─'.repeat ( size - 12 - name.length )}┐` ) );
 
-      await execa.shell ( `${script} && exit 0`, { stdout: 'inherit', stderr: 'inherit' } );
+      await Shell.spawn ( script );
 
-      Utils.log ( color.yellow ( `└${'─'.repeat ( size - 2 )}┘` ) );
+      log ( color.yellow ( `└${'─'.repeat ( size - 2 )}┘` ) );
 
-    } catch ( e ) {
+    } catch ( error: unknown ) {
 
-      Utils.log ( e );
+      log ( error );
 
-      Utils.exit ( `[script] An error occurred while executing the "${color.bold ( name )}" script` );
+      exit ( `[script] An error occurred while executing the "${color.bold ( name )}" script` );
 
     }
 

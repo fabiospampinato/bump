@@ -1,19 +1,25 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
-import * as findUp from 'find-up';
-import * as path from 'path';
+import _ from 'lodash';
+import path from 'node:path';
+import process from 'node:process';
+import File from '~/utils/file';
 
-/* GIT */
+/* MAIN */
 
 const Git = {
 
-  async getPath (): Promise<string | null> {
+  /* API */
 
-    const gitPath = await findUp ( '.git' );
+  getPath: async (): Promise<string | null> => {
 
-    return _.isString ( gitPath ) ? path.dirname ( gitPath ) : null;
+    //TODO: Maybe find up recursively?
+
+    const gitPath = path.join ( process.cwd (), '.git' );
+    const gitPathExists = await File.exists ( gitPath );
+
+    return gitPathExists ? gitPath : null;
 
   }
 

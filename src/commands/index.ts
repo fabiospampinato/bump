@@ -1,15 +1,21 @@
 
 /* IMPORT */
 
-import version from './version';
-import changelog from './changelog';
-import commit from './commit';
-import tag from './tag';
-import release from './release';
+import version from '~/commands/version';
+import changelog from '~/commands/changelog';
+import commit from '~/commands/commit';
+import tag from '~/commands/tag';
+import release from '~/commands/release';
 
-/* COMMANDS */
+/* MAIN */
 
-const Commands = {version, changelog, commit, tag, release};
+const Commands = {
+  version,
+  changelog,
+  commit,
+  tag,
+  release
+};
 
 /* EXPORT */
 

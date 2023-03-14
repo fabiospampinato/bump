@@ -1,5 +1,9 @@
 
-/* TYPES */
+/* HELPERS */
+
+type ArrayMaybe<T> = T | T[];
+
+/* MAIN */
 
 type Bump = {
   commits: Commit[]
@@ -32,4 +36,5 @@ type UploaderOptions<UploadResult, CancelResult> = {
 
 /* EXPORT */
 
-export {Bump, Commit, Options, UploaderOptions};
+export type {ArrayMaybe};
+export type {Bump, Commit, Options, UploaderOptions};

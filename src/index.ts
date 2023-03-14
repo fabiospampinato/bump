@@ -1,13 +1,13 @@
 
 /* IMPORT */
 
-import {Options} from './types';
-import Commands from './commands';
-import Config from './config';
+import Commands from '~/commands';
+import Config from '~/config';
+import type {Options} from '~/types';
 
-/* COMMANDS */
+/* MAIN */
 
-async function bump ( { version, changelog, commit, tag, release }: Options = { version: Config.version.enabled, changelog: Config.changelog.enabled, commit: Config.commit.enabled, tag: Config.tag.enabled, release: Config.release.enabled } ) {
+const bump = async ( { version, changelog, commit, tag, release }: Options = { version: Config.version.enabled, changelog: Config.changelog.enabled, commit: Config.commit.enabled, tag: Config.tag.enabled, release: Config.release.enabled } ): Promise<void> => {
 
   if ( version ) await Commands.version ();
 
@@ -19,7 +19,7 @@ async function bump ( { version, changelog, commit, tag, release }: Options = { 
 
   if ( release ) await Commands.release ();
 
-}
+};
 
 /* EXPORT */
 

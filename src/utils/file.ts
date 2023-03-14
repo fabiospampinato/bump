@@ -1,25 +1,24 @@
 
 /* IMPORT */
 
-import * as fs from 'fs';
-import * as mkdirp from 'mkdirp';
-import * as path from 'path';
-import * as pify from 'pify';
-import * as touch from 'touch';
+import fs from 'node:fs';
+import path from 'node:path';
 
-/* FILE */
+/* MAIN */
 
 const File = {
 
-  async exists ( filePath: string ) {
+  /* API */
+
+  exists: async ( filePath: string ): Promise<boolean> => {
 
     try {
 
-      await pify ( fs.access )( filePath );
+      await fs.promises.access ( filePath );
 
       return true;
 
-    } catch ( e ) {
+    } catch {
 
       return false;
 
@@ -27,29 +26,37 @@ const File = {
 
   },
 
-  async make ( filePath: string, content: string ) {
+  make: async ( filePath: string, content: string ): Promise<void> => {
 
-    await pify ( mkdirp )( path.dirname ( filePath ) );
+    const folderPath = path.dirname ( filePath );
 
-    return File.write ( filePath, content );
+    await fs.promises.mkdir ( folderPath, { recursive: true } );
+
+    await File.write ( filePath, content );
 
   },
 
-  async read ( filePath: string ) {
+  read: async ( filePath: string ) : Promise<string | null> => {
 
     try {
 
-      return ( await pify ( fs.readFile )( filePath, { encoding: 'utf8' } ) ).toString ();
+      const content = fs.promises.readFile ( filePath, 'utf8' );
 
-    } catch ( e ) {}
+      return content;
+
+    } catch {
+
+      return null;
+
+    }
 
   },
 
-  async write ( filePath: string, content: string ) {
+  write: async ( filePath: string, content: string ): Promise<void> => {
 
-    await pify ( fs.writeFile )( filePath, content, {} );
+    await fs.promises.writeFile ( filePath, content );
 
-    touch.sync ( filePath ); // So that programs will notice the change
+    // touch.sync ( filePath ); // So that programs will notice the change //TODO: Is this actually needed?
 
   }
 

@@ -1,15 +1,15 @@
 
 /* IMPORT */
 
-import Tag from '../providers/tag/git';
-import Utils from '../utils';
+import Tag from '~/providers/tag/git';
+import Utils from '~/utils';
 
-/* TAG */
+/* MAIN */
 
-async function tag () {
+const tag = async (): Promise<void> => {
 
-  const repoPath = await Utils.repository.getPath (),
-        version = await Utils.repository.getVersion ( repoPath );
+  const repoPath = await Utils.repository.getPath ();
+  const version = await Utils.repository.getVersion ( repoPath );
 
   if ( !repoPath || !version ) return Utils.exit ( '[tag] Unsupported repository' );
 
@@ -21,7 +21,7 @@ async function tag () {
 
   await Utils.script.run ( 'posttag' );
 
-}
+};
 
 /* EXPORT */
 

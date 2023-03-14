@@ -1,11 +1,13 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 
-/* TEMPLATE */
+/* MAIN */
 
 const Template = {
+
+  /* API */
 
   getRegex: _.memoize ( ( token: string ): RegExp => {
 
@@ -13,7 +15,7 @@ const Template = {
 
   }),
 
-  render ( template: string, tokens = {} ): string {
+  render: ( template: string, tokens = {} ): string => {
 
     _.forOwn ( tokens, ( value: string, token: string ) => {
 

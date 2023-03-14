@@ -1,17 +1,18 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
-import Prompt from 'inquirer-helpers';
-import * as minimist from 'minimist';
-import * as semver from 'semver';
+import _ from 'lodash';
+import process from 'node:process';
+import Prompt from 'prompts-helpers';
+import semver from 'semver';
+import {parseArgv} from 'specialist';
 import {color} from 'specialist';
-import Config from '../config';
-import Utils from '../utils';
+import Config from '~/config';
+import Utils from '~/utils';
 
-/* VERSION */
+/* MAIN */
 
-async function version () {
+const version = async (): Promise<void> => {
 
   /* CHECKS */
 
@@ -25,13 +26,13 @@ async function version () {
 
   /* NEXT */
 
-  const argv = minimist ( process.argv.slice ( 2 ) ),
-        commands = ['version', 'changelog', 'commit', 'tag', 'release'],
-        increments = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease', 'custom'];
+  const argv = parseArgv ( process.argv.slice ( 2 ) );
+  const commands = ['version', 'changelog', 'commit', 'tag', 'release'];
+  const increments = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease', 'custom'];
 
-  let next = argv._[1] || argv._[0],
-      increment,
-      version;
+  let next = argv._[1] || argv._[0];
+  let increment: string | false | undefined;
+  let version: string | false | undefined;
 
   if ( next && !commands.includes ( next ) ) {
 
@@ -60,13 +61,13 @@ async function version () {
 
       if ( !increments.length ) return Utils.exit ( '[version] You have to explicitly provide a version number when no increments are enabled' );
 
-      increment = await Prompt.list ( 'Select an increment:', increments );
+      increment = await Prompt.select ( 'Select an increment:', increments );
 
     }
 
     if ( increment === 'custom' ) {
 
-      version = await Prompt.input ( 'Enter a version:' );
+      version = await Prompt.text ( 'Enter a version:' );
 
     }
 
@@ -80,11 +81,11 @@ async function version () {
 
     if ( !semver.valid ( version ) ) {
 
-      version = semver.coerce ( version );
+      const semversion = semver.coerce ( version );
 
-      if ( !version ) return Utils.exit ( `[version] Invalid version number: "${color.bold ( original )}"` );
+      if ( !semversion ) return Utils.exit ( `[version] Invalid version number: "${color.bold ( original )}"` );
 
-      version = version.version;
+      version = semversion.version;
 
     }
 
@@ -106,11 +107,11 @@ async function version () {
 
   await Utils.script.run ( 'prebump' );
 
-  await Promise.all ( providers.map ( provider => provider.bump ( increment, version ) ) );
+  await Promise.all ( providers.map ( provider => provider.bump ( increment, version ) ) ); //TSC
 
   await Utils.script.run ( 'postbump' );
 
-}
+};
 
 /* EXPORT */
 

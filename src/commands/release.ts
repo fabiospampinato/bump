@@ -1,16 +1,16 @@
 
 /* IMPORT */
 
-import Config from '../config';
-import GitHub from '../providers/release/github';
-import Utils from '../utils';
+import Config from '~/config';
+import GitHub from '~/providers/release/github';
+import Utils from '~/utils';
 
-/* RELEASE */
+/* MAIN */
 
-async function release () {
+const release = async (): Promise<void> => {
 
-  const repoPath = await Utils.repository.getPath (),
-        version = await Utils.repository.getVersion ( repoPath );
+  const repoPath = await Utils.repository.getPath ();
+  const version = await Utils.repository.getVersion ( repoPath );
 
   if ( !repoPath || !version ) return Utils.exit ( '[release] Unsupported repository' );
 
@@ -26,7 +26,7 @@ async function release () {
 
   await Utils.script.run ( 'postrelease' );
 
-}
+};
 
 /* EXPORT */
 

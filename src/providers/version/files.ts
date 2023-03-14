@@ -1,13 +1,12 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
-import * as stringMatches from 'string-matches';
-import {Commit} from '../../types';
-import Config from '../../config';
-import Abstract from './abstract';
+import _ from 'lodash';
+import Config from '~/config';
+import Abstract from '~/providers/version/abstract';
+import type {Commit} from '~/types';
 
-/* FILES */
+/* MAIN */
 
 class Files extends Abstract {
 
@@ -36,8 +35,8 @@ class Files extends Abstract {
 
     _.forOwn ( this.files, ( data, basePath ) => {
 
-      const datas = _.isArray ( data[0] ) ? data : [data],
-            [regexes, replacements, flags] = _.zip ( ...datas ) as string[][];
+      const datas = _.isArray ( data[0] ) ? data : [data];
+      const [regexes, replacements, flags] = _.zip ( ...datas ) as string[][];
 
       this.regexes[basePath] = regexes.map ( ( regex, i ) => new RegExp ( regex, _.get ( flags, i, 'gmi' ) ) );
       this.replacements[basePath] = replacements;
@@ -80,15 +79,15 @@ class Files extends Abstract {
 
     for ( let i = 0, l = this.basePaths.length; i < l; i++ ) {
 
-      const basePath = this.basePaths[i],
-            content = await contentProvider ( basePath );
+      const basePath = this.basePaths[i];
+      const content = await contentProvider ( basePath );
 
       if ( !content ) continue;
 
       for ( let ri = 0, rl = this.regexes[basePath].length; ri < rl; ri++ ) {
 
-        const re = this.regexes[basePath][ri],
-              matches = stringMatches ( content, re );
+        const re = this.regexes[basePath][ri];
+        const matches = stringMatches ( content, re );
 
         for ( let match of matches ) {
 

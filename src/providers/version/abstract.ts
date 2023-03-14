@@ -1,30 +1,37 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
-import * as path from 'path';
-import * as pify from 'pify';
-import * as semver from 'semver';
-import * as simpleGit from 'simple-git';
-import {Bump, Commit} from '../../types';
-import Utils from '../../utils';
+import _ from 'lodash';
+import path from 'node:path';
+import git from 'simple-git';
+import semver from 'semver';
+import Utils from '~/utils';
+import type {Bump, Commit} from '~/types';
 
-/* ABSTRACT */
+/* MAIN */
 
 abstract class Abstract {
 
-  repoPath; git;
+  /* VARIABLES */
+
+  protected repoPath; git;
+
+  /* CONSTRUCTOR */
 
   constructor ( repoPath: string ) {
 
     this.repoPath = repoPath;
 
-    this.git = pify ( _.bindAll ( simpleGit ( this.repoPath ), ['log', 'silent', 'show'] ) );
+    this.git = git ( this.repoPath );
     this.git.silent ( true );
 
     this.init ();
 
   }
+
+  /* API */
+
+  //TODO: Continue updating this file from here
 
   abstract async isSupported (): Promise<boolean>;
 
@@ -102,10 +109,10 @@ abstract class Abstract {
 
   async getCommitsBumps ( limit: number = Infinity ): Promise<Bump[] | undefined> { // Get "limit" number of groups of commits grouped by version
 
-    let bumps: Bump[] = [],
-        bump: Bump = { version: '', commits: [] },
-        chunkNth = 0,
-        prevVersion;
+    let bumps: Bump[] = [];
+    let bump: Bump = { version: '', commits: [] };
+    let chunkNth = 0;
+    let prevVersion;
 
     whileloop:
     while ( true ) {
@@ -174,9 +181,9 @@ abstract class Abstract {
 
   }
 
-  abstract async getVersionByCommit ( commit?: Commit ): Promise<string>;
+  abstract getVersionByCommit ( commit?: Commit ): Promise<string>;
 
-  abstract async updateVersion ( version: string );
+  abstract updateVersion ( version: string ): Promise<void>;
 
 }
 

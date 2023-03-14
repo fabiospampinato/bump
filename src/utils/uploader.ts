@@ -1,31 +1,30 @@
 
 /* IMPORT */
 
-import * as chokidar from 'chokidar';
-import {FSWatcher} from 'chokidar';
-import delay from 'promise-resolve-timeout';
+import {setTimeout as delay} from 'node:timers/promises';
 import {color} from 'specialist';
-import file from './file';
-import log from './log';
-import {UploaderOptions} from '../types';
+import Watcher from 'watcher';
+import file from '~/utils/file';
+import log from '~/utils/log';
+import type {UploaderOptions} from '~/types';
 
-/* UPLOADER */
+/* MAIN */
 
 class Uploader<UploadResult, CancelResult> {
 
   /* VARIABLES */
 
-  options: UploaderOptions<UploadResult, CancelResult>;
-  watcher: FSWatcher;
+  private options: UploaderOptions<UploadResult, CancelResult>;
+  private watcher?: Watcher;
 
-  uploading: Record<string, Promise<UploadResult>> = {};
-  reuploading: Record<string, Promise<CancelResult>> = {};
+  private uploading: Record<string, Promise<UploadResult>> = {};
+  private reuploading: Record<string, Promise<CancelResult>> = {};
 
-  uploadedNr: number = 0;
-  uploadingNr: number = 0;
+  private uploadedNr: number = 0;
+  private uploadingNr: number = 0;
 
-  wait: Promise<void> | false; // Until this promise resolves, i.e. this property gets set to `false`, we can't exit, in order not to miss out any FS events
-  exit: Function; // Makes `start` resolve
+  private wait?: Promise<void> | false; // Until this promise resolves, i.e. this property gets set to `false`, we can't exit, in order not to miss out any FS events
+  private exit?: Function; // Makes `start` resolve
 
   /* CONSTRUCTOR */
 
@@ -37,30 +36,33 @@ class Uploader<UploadResult, CancelResult> {
 
   /* WATCHING */
 
-  _watchHandler ( method: Function ) {
+  _watchHandler = ( callback: ( filePath: string ) => void ): (( filePath: string ) => void) => {
 
     return ( filePath: string ) => {
 
       this.keepalive ();
 
-      method.call ( this, filePath );
+      callback ( filePath );
 
     };
 
   }
 
-  watch (): void {
+  watch = (): void => {
 
     this.unwatch ();
 
-    this.watcher = chokidar.watch ( this.options.globs, { ignored: /node_modules/ } )
-                           .on ( 'add', this._watchHandler ( this.upload ) )
-                           .on ( 'change', this._watchHandler ( this.reupload ) )
-                           .on ( 'unlink', this._watchHandler ( this.reupload ) );
+    // const isIgnored = ( filePath: string ) => /node_modules/.test ( filePath );
+    // const isMatch = ( filePath: string ) => !isIgnored ( filePath ) && zeptomatch ( this.options.globs, filePath );
+
+    this.watcher = new Watcher (); //TODO: This is watching globs... that doesn't work anymore
+    this.watcher.on ( 'add', this._watchHandler ( this.upload ) )
+    this.watcher.on ( 'change', this._watchHandler ( this.reupload ) )
+    this.watcher.on ( 'unlink', this._watchHandler ( this.reupload ) );
 
   }
 
-  unwatch (): void {
+  unwatch = (): void => {
 
     this.watcher?.close ();
 
@@ -68,7 +70,7 @@ class Uploader<UploadResult, CancelResult> {
 
   /* UPLOADING */
 
-  async upload ( filePath: string ): Promise<any> {
+  upload = async ( filePath: string ): Promise<void> => {
 
     if ( this.isUploading ( filePath ) ) return this.reupload ( filePath );
 
@@ -76,24 +78,24 @@ class Uploader<UploadResult, CancelResult> {
 
     log ( `Uploading "${color.bold ( filePath )}"` );
 
-    this.uploadingNr++;
+    this.uploadingNr += 1;
 
     await ( this.uploading[filePath] = this.options.upload ( filePath ) );
 
-    this.uploadingNr--;
-    this.uploadedNr++;
+    this.uploadingNr -= 1;
+    this.uploadedNr += 1;
 
     this.finish ();
 
   }
 
-  isUploading ( filePath: string ): boolean {
+  isUploading = ( filePath: string ): boolean => {
 
-    return filePath in this.uploading;
+    return ( filePath in this.uploading );
 
   }
 
-  async reupload ( filePath: string ): Promise<void> {
+  reupload = async ( filePath: string ): Promise<void> => {
 
     if ( this.isReuploading ( filePath ) ) return;
 
@@ -101,8 +103,8 @@ class Uploader<UploadResult, CancelResult> {
 
     log ( `Reuploading "${color.bold ( filePath )}" because it changed on disk` );
 
-    this.uploadingNr++;
-    this.uploadedNr--;
+    this.uploadingNr += 1;
+    this.uploadedNr -= 1;
 
     const asset = await this.uploading[filePath];
 
@@ -111,35 +113,37 @@ class Uploader<UploadResult, CancelResult> {
     delete this.uploading[filePath];
     delete this.reuploading[filePath];
 
-    this.uploadingNr--;
+    this.uploadingNr -= 1;
 
     return this.upload ( filePath );
 
   }
 
-  isReuploading ( filePath: string ): boolean {
+  isReuploading = ( filePath: string ): boolean => {
 
-    return filePath in this.reuploading;
+    return ( filePath in this.reuploading );
 
   }
 
   /* LIFECYCLE */
 
-  keepalive ( timeout: number = 5000 ): void {
+  keepalive = ( timeout: number = 5000 ): void => {
 
-    const thisWait = delay ( timeout, () => {
+    const thisWait = this.wait = new Promise ( async resolve => {
+
+      await delay ( timeout );
 
       if ( this.wait !== thisWait ) return;
 
       this.wait = false;
 
-    });
+      resolve ();
 
-    this.wait = thisWait;
+    });
 
   }
 
-  start (): Promise<void> {
+  start = (): Promise<void> => {
 
     this.watch ();
 
@@ -153,7 +157,7 @@ class Uploader<UploadResult, CancelResult> {
 
   }
 
-  finish ( force?: boolean ): void {
+  finish = ( force?: boolean ): void => {
 
     if ( !force && ( this.options.filesNr > 0 ? this.uploadedNr !== this.options.filesNr : !!this.uploadingNr ) ) return;
 
@@ -165,7 +169,7 @@ class Uploader<UploadResult, CancelResult> {
 
       this.unwatch ();
 
-      this.exit ();
+      this.exit?.();
 
     }
 

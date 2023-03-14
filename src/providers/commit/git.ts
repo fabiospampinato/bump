@@ -1,11 +1,11 @@
 
 /* IMPORT */
 
-import * as execa from 'execa';
+import execa from 'execa';
 import Config from '../../config';
 import Utils from '../../utils';
 
-/* COMMIT */
+/* MAIN */
 
 const Commit = {
 

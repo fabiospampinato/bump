@@ -1,17 +1,18 @@
 
 /* IMPORT */
 
+import process from 'node:process';
 import {color} from 'specialist';
 
-/* EXIT */
+/* MAIN */
 
-function exit ( message: string = 'An error occurred!', code: number = 1 ) {
+const exit = ( message: string = 'An error occurred' ): never => {
 
   console.error ( color.red ( message ) );
 
-  process.exit ( code );
+  process.exit ( 1 );
 
-}
+};
 
 /* EXPORT */
 

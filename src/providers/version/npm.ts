@@ -1,13 +1,16 @@
 
 /* IMPORT */
 
-import Files from './files';
+import Files from '~/providers/version/files';
+import type {ArrayMaybe} from '~/types';
 
-/* NPM */
+/* MAIN */
 
 class NPM extends Files {
 
-  getFiles () {
+  /* API */
+
+  getFiles = (): Record<string, ArrayMaybe<[string, string, string?]>> => {
 
     return {
       'package.json': ['"version":\\s*"([^"]*?)"', '"version": "[version]"', "mi"],

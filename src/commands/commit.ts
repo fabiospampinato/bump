@@ -1,15 +1,15 @@
 
 /* IMPORT */
 
-import Commit from '../providers/commit/git';
-import Utils from '../utils';
+import Commit from '~/providers/commit/git';
+import Utils from '~/utils';
 
-/* COMMIT */
+/* MAIN */
 
-async function commit () {
+const commit = async (): Promise<void> => {
 
-  const repoPath = await Utils.repository.getPath (),
-        version = await Utils.repository.getVersion ( repoPath );
+  const repoPath = await Utils.repository.getPath ();
+  const version = await Utils.repository.getVersion ( repoPath );
 
   if ( !repoPath || !version ) return Utils.exit ( '[commit] Unsupported repository' );
 
@@ -21,7 +21,7 @@ async function commit () {
 
   await Utils.script.run ( 'postcommit' );
 
-}
+};
 
 /* EXPORT */
 

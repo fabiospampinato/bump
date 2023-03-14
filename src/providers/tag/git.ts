@@ -1,25 +1,26 @@
 
 /* IMPORT */
 
-import * as execa from 'execa';
-import Config from '../../config';
-import Utils from '../../utils';
+import Config from '~/config';
+import Utils from '~/utils';
 
-/* TAG */
+/* MAIN */
 
 const Tag = {
 
-  async add ( repoPath: string, version: string ) {
+  /* API */
+
+  add: async ( repoPath: string, version: string ): Promise<void> => {
 
     const name = Utils.template.render ( Config.tag.name, {version} );
 
     try {
 
-      await execa ( 'git', ['tag', name], { cwd: repoPath } );
+      await Utils.shell.exec ( 'git', ['tag', name], { cwd: repoPath } );
 
-    } catch ( e ) {
+    } catch ( error: unknown ) {
 
-      Utils.log ( e );
+      Utils.log ( error );
 
       Utils.exit ( '[tag] An error occurred while tagging the commit' );
 

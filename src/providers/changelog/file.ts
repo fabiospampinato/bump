@@ -1,17 +1,15 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
-import * as moment from 'moment';
-import * as opn from 'opn';
-import * as path from 'path';
-import Prompt from 'inquirer-helpers';
-import * as stringMatches from 'string-matches';
-import {Commit} from '../../types';
+import _ from 'lodash';
+import open from 'open';
+import path from 'node:path';
+import Prompt from 'prompts-helpers';
 import Config from '../../config';
 import Utils from '../../utils';
+import type {Commit} from '../../types';
 
-/* CHANGELOG */
+/* MAIN */
 
 const Changelog = {
 
@@ -31,8 +29,8 @@ const Changelog = {
 
     if ( !bumps || !bumps.length ) return Utils.exit ( '[changelog] No commits found' );
 
-    const sections = bumps.map ( bump => Changelog.section.render ( bump.version, bump.commits ) ),
-          content = sections.join ( '' );
+    const sections = bumps.map ( bump => Changelog.section.render ( bump.version, bump.commits ) );
+    const content = sections.join ( '' );
 
     return await Changelog.write ( repoPath, content );
 
@@ -40,8 +38,8 @@ const Changelog = {
 
   async read ( repoPath: string ) {
 
-    const changelogPath = path.join ( repoPath, Config.changelog.file ),
-          content = await Utils.file.read ( changelogPath );
+    const changelogPath = path.join ( repoPath, Config.changelog.file );
+    const content = await Utils.file.read ( changelogPath );
 
     return content;
 
@@ -77,8 +75,8 @@ const Changelog = {
 
   async write ( repoPath: string, content: string ) {
 
-    const changelogPath = path.join ( repoPath, Config.changelog.file ),
-          contentCleaned = content.replace ( /^(\s*\r?\n){2,}/gm, '\n' ).replace ( /(\s*\r?\n){2,}$/gm, '\n' ); // Removing multiple starting/ending new lines
+    const changelogPath = path.join ( repoPath, Config.changelog.file );
+    const contentCleaned = content.replace ( /^(\s*\r?\n){2,}/gm, '\n' ).replace ( /(\s*\r?\n){2,}$/gm, '\n' ); // Removing multiple starting/ending new lines
 
     await Utils.file.make ( changelogPath, contentCleaned );
 
@@ -92,8 +90,8 @@ const Changelog = {
 
       if ( !content ) return;
 
-      const headerRe = new RegExp ( `^${_.escapeRegExp ( Config.changelog.version ).replace ( /\\\[[^\]]+\\\]/gi, '(.*)' )}$`, 'gmi' ), // Regex that matches the headers, assuming they all used the same template
-            matches = stringMatches ( content, headerRe, 2 );
+      const headerRe = new RegExp ( `^${_.escapeRegExp ( Config.changelog.version ).replace ( /\\\[[^\]]+\\\]/gi, '(.*)' )}$`, 'gmi' ); // Regex that matches the headers, assuming they all used the same template
+      const matches = stringMatches ( content, headerRe, 2 );
 
       if ( matches.length < 2 ) return;
 
@@ -134,8 +132,8 @@ const Changelog = {
 
           if ( mergeRe.test ( commit.message ) ) return;
 
-          const {hash, date, message, author_name, author_email} = commit,
-                messageCleaned = message.replace ( / \(HEAD\)$/i, '' ).replace ( / \(HEAD -> [^)]+\)$/i, '' ).replace ( / \(tag: [^)]+\)$/i, '' )
+          const {hash, date, message, author_name, author_email} = commit;
+          const messageCleaned = message.replace ( / \(HEAD\)$/i, '' ).replace ( / \(HEAD -> [^)]+\)$/i, '' ).replace ( / \(tag: [^)]+\)$/i, '' )
 
           const commitTokens = _.extend ( {}, tokens, {
             date: moment ( new Date ( date ) ).format ( Config.tokens.date.format ),

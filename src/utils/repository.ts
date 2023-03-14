@@ -1,22 +1,24 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
-import Config from '../config';
-import VersionProviders from '../providers/version';
-import Git from './git';
+import _ from 'lodash';
+import Config from '~/config';
+import VersionProviders from '~/providers/version';
+import Git from '~/utils/git';
 
-/* REPOSITORY */
+/* MAIN */
 
 const Repository = {
 
-  async getPath (): Promise<string | null> {
+  /* API */
 
-    return await Git.getPath ();
+  getPath: async (): Promise<string | null> => {
+
+    return Git.getPath ();
 
   },
 
-  async getVersion ( repoPath: string | null ): Promise<string> {
+  getVersion: async ( repoPath: string | null ): Promise<string> => {
 
     if ( repoPath ) {
 
@@ -30,21 +32,21 @@ const Repository = {
 
   },
 
-  async getVersionProviders ( repoPath: string ) {
+  getVersionProviders: async ( repoPath: string ) => { //TSC
 
-    const providers = VersionProviders.map ( Provider => new Provider ( repoPath ) ),
-          isSupported = await Promise.all ( providers.map ( provider => provider.isSupported () ) ),
-          providersSupported = providers.filter ( ( p, index ) => isSupported[index] );
+    const providers = VersionProviders.map ( Provider => new Provider ( repoPath ) );
+    const isSupported = await Promise.all ( providers.map ( provider => provider.isSupported () ) );
+    const providersSupported = providers.filter ( ( _, index ) => isSupported[index] );
 
     return providersSupported;
 
   },
 
-  async getVersionProvidersResult ( repoPath: string, method: string, ...args ) {
+  getVersionProvidersResult: async ( repoPath: string, method: string, ...args ) => { //TSC
 
     const providers = await Repository.getVersionProviders ( repoPath );
 
-    for ( let provider of providers ) {
+    for ( const provider of providers ) {
 
       const result = await provider[method]( ...args );
 

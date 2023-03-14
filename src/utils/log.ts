@@ -1,17 +1,17 @@
 
 /* IMPORT */
 
-import Config from '../config';
+import Config from '~/config';
 
-/* EXIT */
+/* MAIN */
 
-function log ( message: string ) {
+const log = ( message: unknown ): void => {
 
   if ( Config.silent ) return;
 
   console.log ( message );
 
-}
+};
 
 /* EXPORT */
 

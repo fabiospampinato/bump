@@ -1,18 +1,22 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
-import * as minimist from 'minimist';
-import * as os from 'os';
-import * as path from 'path';
-import Utils from './utils';
+import _ from 'lodash';
+import findUp from 'find-up-json';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import process from 'node:process';
+import {parseArgv} from 'specialist';
+import Utils from '~/utils';
+import type {ArrayMaybe} from '~/types';
 
-/* CONFIG */
+/* MAIN */
 
 const Config = {
   force: false, // Force the command without prompting the user
   silent: false, // Minimize the amount of logs
-  files: {}, // A map of `relativeFilePath: [regex, replacement, regexFlags?] | [regex, replacement, regexFlags?][]`
+  files: <Record<string, ArrayMaybe<[string, string, string?]>>> {}, // A map of `relativeFilePath: ArrayMaybe<[regex, replacement, regexFlags?]>
   version: {
     enabled: true, // Bump the version number
     initial: '0.0.0', // Initial version
@@ -75,46 +79,45 @@ const Config = {
 
 /* LOCAL */
 
-function initLocal () {
+const initLocal = (): void => {
 
-  const localPath = path.join ( os.homedir (), '.bump.json' ),
-        localConfig = _.attempt ( require, localPath );
+  const localConfig = findUp ( '.bump.json', os.homedir () );
 
-  if ( _.isError ( localConfig ) ) return;
+  if ( !localConfig ) return;
 
-  Utils.config.merge ( Config, localConfig );
+  Utils.config.merge ( Config, localConfig.content );
 
-}
+};
 
 initLocal ();
 
 /* CWD */
 
-function initCwd () {
+const initCwd = (): void => {
 
-  const cwdPath = path.join ( process.cwd (), 'bump.json' ),
-        cwdConfig = _.attempt ( require, cwdPath );
+  const cwdConfig = findUp ( 'bump.json', process.cwd () );
 
-  if ( _.isError ( cwdConfig ) ) return;
+  if ( !cwdConfig ) return;
 
-  Utils.config.merge ( Config, cwdConfig );
+  Utils.config.merge ( Config, cwdConfig.content );
 
-}
+};
 
 initCwd ();
 
 /* DYNAMIC */
 
-function initDynamic () {
+const initDynamic = () => {
 
-  const argv = minimist ( process.argv.slice ( 2 ) );
+  const argv = parseArgv ( process.argv.slice ( 2 ) );
 
   /* CONFIG */
 
-  const dynamicPath = [argv.config, argv.c].find ( _.isString ),
-        dynamicConfigRequire = _.attempt ( require, path.resolve ( process.cwd (), dynamicPath || '' ) ),
-        dynamicConfigJSON = _.attempt ( JSON.parse, dynamicPath ),
-        dynamicConfig = !_.isError ( dynamicConfigRequire ) ? dynamicConfigRequire : ( !_.isError ( dynamicConfigJSON ) ? dynamicConfigJSON : undefined );
+  const dynamicPath = _.isString ( argv['config'] ) ? argv['config'] : '';
+  const dynamicPathResolved = path.resolve ( process.cwd (), dynamicPath );
+  const dynamicConfigFile = _.attempt ( () => fs.readFileSync ( dynamicPathResolved, 'utf8' ) );
+  const dynamicConfigJSON = _.attempt ( () => JSON.parse ( dynamicPath ) );
+  const dynamicConfig = !_.isError ( dynamicConfigFile ) ? dynamicConfigFile : ( !_.isError ( dynamicConfigJSON ) ? dynamicConfigJSON : undefined );
 
   if ( dynamicConfig ) Utils.config.merge ( Config, dynamicConfig );
 
@@ -124,39 +127,39 @@ function initDynamic () {
 
   /* SWITCHES */
 
-  const switches = ['silent', 'force'];
+  const switches = <const> ['silent', 'force'];
 
   switches.forEach ( name => {
 
-    Config[name] = [argv[name], Config[name]].find ( _.isBoolean );
+    Config[name] = argv[name] || Config[name] || undefined;
 
   });
 
   /* SCRIPTS */
 
-  Config.scripts.enabled = [argv.scripts, Config.scripts.enabled].find ( _.isBoolean ) as boolean;
+  Config.scripts.enabled = !!argv['scripts'] || !!Config.scripts.enabled;
 
-  const scripts = Object.keys ( Config.scripts );
+  const scripts = <const> ['prebump', 'postbump', 'prechangelog', 'postchangelog', 'precommit', 'postcommit', 'pretag', 'posttag', 'prerelease', 'postrelease']
 
   scripts.forEach ( name => {
 
-    if ( !_.isString ( Config.scripts[name] ) ) return;
-
-    Config.scripts[name] = [argv[name], Config.scripts[name]].find ( _.isString );
+    Config.scripts[name] = argv[name] || Config.scripts[name] || undefined;
 
   });
 
-}
+};
 
 initDynamic ();
 
 /* INIT ENVIRONMENT */
 
-function initEnvironment () {
+const initEnvironment = (): void => {
 
-  if ( process.env.GITHUB_TOKEN ) Config.release.github.token = process.env.GITHUB_TOKEN;
+  const token = process.env['GITHUB_TOKEN'];
 
-}
+  if ( token ) Config.release.github.token = token;
+
+};
 
 initEnvironment ();
 

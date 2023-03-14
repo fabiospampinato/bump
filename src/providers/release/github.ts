@@ -1,18 +1,18 @@
 
 /* IMPORT */
 
-import * as fs from 'fs';
-import * as mime from 'mime-types';
-import * as octokit from '@octokit/rest';
-import * as opn from 'opn';
-import * as path from 'path';
-import * as username from 'git-username';
+import fs from 'fs';
+import mime from 'mime-types';
+import octokit from '@octokit/rest';
+import opn from 'opn';
+import path from 'path';
+import username from 'git-username';
 import Config from '../../config';
 import Utils from '../../utils';
-import {UploaderOptions} from '../../types';
 import Changelog from '../changelog/file';
+import type {UploaderOptions} from '../../types';
 
-/* COMMIT */
+/* MAIN */
 
 const GitHub = {
 
@@ -20,16 +20,16 @@ const GitHub = {
 
     if ( !Config.release.github.token ) return Utils.exit ( '[release] Missing GitHub token' );
 
-    const cwd = repoPath,
-          github = new octokit ({
-            auth: Config.release.github.token
-          });
+    const cwd = repoPath;
+    const github = new octokit ({
+      auth: Config.release.github.token
+    });
 
     try {
 
-      const owner = Config.release.github.owner || username ({ cwd }),
-            repo = Config.release.github.repo || path.basename ( cwd ),
-            tag = Utils.template.render ( Config.tag.name, {version} );
+      const owner = Config.release.github.owner || username ({ cwd });
+      const repo = Config.release.github.repo || path.basename ( cwd );
+      const tag = Utils.template.render ( Config.tag.name, {version} );
 
       const release = await github.repos.createRelease ({
         owner,
