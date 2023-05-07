@@ -130,9 +130,9 @@ const Changelog = {
 
           if ( commit.isBump ) return;
 
-          const mergeRe = /^(Merge PR|Merge pull request|Merge branch) /gi;
+          const skipRe = /^(Merge PR|Merge pull request|Merge branch|Changelog: update) /gi;
 
-          if ( mergeRe.test ( commit.message ) ) return;
+          if ( skipRe.test ( commit.message ) ) return;
 
           const {hash, date, message, author_name, author_email} = commit,
                 messageCleaned = message.replace ( / \(HEAD\)$/i, '' ).replace ( / \(HEAD -> [^)]+\)$/i, '' ).replace ( / \(tag: [^)]+\)$/i, '' )
