@@ -11,7 +11,7 @@ class NPM extends Files {
 
     return {
       'package.json': ['"version":\\s*"([^"]*?)"', '"version": "[version]"', "mi"],
-      'package-lock.json': ['"version":\\s*"([^"]*?)"', '"version": "[version]"', "mi"]
+      'package-lock.json': ['"version":\\s*"([^"]*?)"', '"version": "[version]"', "gmi"]
     };
 
   }
