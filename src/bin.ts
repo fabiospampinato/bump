@@ -2,77 +2,52 @@
 
 /* IMPORT */
 
-import {bin} from 'specialist';
-import bump from '.';
+import {bin, color} from 'specialist';
+import {all, config, version, changelog, commit, tag, release} from '.';
 
 /* MAIN */
 
-//TODO: Add back custom usage examples
-
 bin ( 'bump', 'Update your project\'s version, and more' )
-  /* DEFAULT OPTIONS */
+  /* USAGES */
+  .usage ( `bump ${color.yellow ( '[version|type]' )}` )
+  .usage ( `bump ${color.yellow ( 'minor' )}` )
+  .usage ( `bump ${color.yellow ( '1.0.1' )}` )
+  .usage ( `bump ${color.green ( '--config' )} ${color.blue ( './conf/bump.json' )}` )
+  .usage ( `bump ${color.magenta ( 'tag' )} ${color.green ( '--posttag' )} ${color.blue ( '"echo Done!"' )}` )
+  .usage ( `bump ${color.magenta ( 'release' )} ${color.green ( '--prerelease' )} ${color.blue ( '"npm run build"' )} ${color.green ( '--postrelease' )} ${color.blue ( '"npm publish"' )}` )
+  /* DEFAULT COMMAND */
   .option ( '--config, -c <path|object>', 'Path to configuration file or plain JSON object' )
-  .option ( '--force', 'Force the command without prompting the user' )
-  .option ( '--silent', 'Minimize the amount of logs' )
-  .option ( '--no-scripts', 'Disable scripts' )
-  .option ( '--prebump <script>', 'Script to execute before bumping the version' )
+  .option ( '--no-scripts', 'Disable pre and post scripts' )
+  .option ( '--preversion <script>', 'Script to execute before bumping the version' )
   .option ( '--prechangelog <script>', 'Script to execute before updating the changelog' )
   .option ( '--precommit <script>', 'Script to execute before making the commit' )
   .option ( '--pretag <script>', 'Script to execute before tagging the commit' )
   .option ( '--prerelease <script>', 'Script to execute before releasing' )
-  .option ( '--postbump <script>', 'Script to execute after bumping the version' )
+  .option ( '--postversion <script>', 'Script to execute after bumping the version' )
   .option ( '--postchangelog <script>', 'Script to execute after updating the changelog' )
   .option ( '--postcommit <script>', 'Script to execute after making the commit' )
   .option ( '--posttag <script>', 'Script to execute after tagging the commit' )
   .option ( '--postrelease <script>', 'Script to execute after releasing' )
-  /* DEFAULT COMMAND */
-  .argument ( '[version|increment]', 'Next version or supported increment name' )
-  .action ( () => bump () )
+  .argument ( '[version|type]', 'Next version or supported increment type' )
+  .action ( ( _, args ) => all ( args[0] ) )
+  /* CONFIG */
+  .command ( 'config', 'Inspect the configuration, for debugging' )
+  .action ( () => config () )
   /* VERSION */
   .command ( 'version', 'Only bump the version number' )
-  .option ( '--config, -c <path|object>', 'Path to configuration file or plain JSON object' )
-  .option ( '--force', 'Force the command without prompting the user' )
-  .option ( '--silent', 'Minimize the amount of logs' )
-  .option ( '--no-scripts', 'Disable scripts' )
-  .option ( '--prebump <script>', 'Script to execute before bumping the version' )
-  .option ( '--postbump <script>', 'Script to execute after bumping the version' )
-  .argument ( '[version|increment]', 'Next version or supported increment name' )
-  .action ( () => bump ({ version: true }) )
+  .argument ( '[version|type]', 'Next version or supported increment type' )
+  .action ( ( _, args ) => version ( args[0] ) )
   /* CHANGELOG */
   .command ( 'changelog', 'Only update the changelog' )
-  .option ( '--config, -c <path|object>', 'Path to configuration file or plain JSON object' )
-  .option ( '--force', 'Force the command without prompting the user' )
-  .option ( '--silent', 'Minimize the amount of logs' )
-  .option ( '--no-scripts', 'Disable scripts' )
-  .option ( '--prechangelog <script>', 'Script to execute before updating the changelog' )
-  .option ( '--postchangelog <script>', 'Script to execute after updating the changelog' )
-  .action ( () => bump ({ changelog: true }) )
+  .action ( () => changelog ( true ) )
   /* COMMIT */
   .command ( 'commit', 'Only make the commit' )
-  .option ( '--config, -c <path|object>', 'Path to configuration file or plain JSON object' )
-  .option ( '--force', 'Force the command without prompting the user' )
-  .option ( '--silent', 'Minimize the amount of logs' )
-  .option ( '--no-scripts', 'Disable scripts' )
-  .option ( '--precommit <script>', 'Script to execute before making the commit' )
-  .option ( '--postcommit <script>', 'Script to execute after making the commit' )
-  .action ( () => bump ({ commit: true }) )
+  .action ( () => commit () )
   /* TAG */
   .command ( 'tag', 'Only tag the commit' )
-  .option ( '--config, -c <path|object>', 'Path to configuration file or plain JSON object' )
-  .option ( '--force', 'Force the command without prompting the user' )
-  .option ( '--silent', 'Minimize the amount of logs' )
-  .option ( '--no-scripts', 'Disable scripts' )
-  .option ( '--pretag <script>', 'Script to execute before tagging the commit' )
-  .option ( '--posttag <script>', 'Script to execute after tagging the commit' )
-  .action ( () => bump ({ tag: true }) )
+  .action ( () => tag () )
   /* RELEASE */
   .command ( 'release', 'Only make the release' )
-  .option ( '--config, -c <path|object>', 'Path to configuration file or plain JSON object' )
-  .option ( '--force', 'Force the command without prompting the user' )
-  .option ( '--silent', 'Minimize the amount of logs' )
-  .option ( '--no-scripts', 'Disable scripts' )
-  .option ( '--prerelease <script>', 'Script to execute before releasing' )
-  .option ( '--postrelease <script>', 'Script to execute after releasing' )
-  .action ( () => bump ({ release: true }) )
+  .action ( () => release () )
   /* RUN */
   .run ();

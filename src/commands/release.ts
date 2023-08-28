@@ -1,30 +1,32 @@
 
 /* IMPORT */
 
-import Config from '~/config';
-import GitHub from '~/providers/release/github';
-import Utils from '~/utils';
+import releaseGithub from '../actions/release.github';
+import {exit, getPackage, getRepositoryPath} from '../utils';
+import command from './command';
 
 /* MAIN */
 
-const release = async (): Promise<void> => {
+const release = async (): Promise<boolean> => {
 
-  const repoPath = await Utils.repository.getPath ();
-  const version = await Utils.repository.getVersion ( repoPath );
+  /* INITIALIZATION */
 
-  if ( !repoPath || !version ) return Utils.exit ( '[release] Unsupported repository' );
+  const pkg = getPackage ();
+  const repoPath = getRepositoryPath ();
 
-  await Utils.script.run ( 'prerelease' );
+  if ( !pkg || !repoPath ) return exit ( 'Unsupported repository' );
 
-  if ( Config.release.github.enabled ) {
+  /* COMMAND */
 
-    Utils.log ( 'Releasing to GitHub...' );
-
-    await GitHub.do ( repoPath, version );
-
-  }
-
-  await Utils.script.run ( 'postrelease' );
+  return command ({
+    name: 'commit',
+    start: 'Releasing to GitHub...',
+    success: 'Released to GitHub successfully',
+    error: 'Release to GitHub failed',
+    run: () => {
+      return releaseGithub ( pkg, repoPath );
+    }
+  });
 
 };
 

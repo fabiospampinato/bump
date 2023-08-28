@@ -1,32 +1,46 @@
 
 /* IMPORT */
 
-import Config from '~/config';
-import Changelog from '~/providers/changelog/file';
-import Utils from '~/utils';
+import changelogCreate from '../actions/changelog.create';
+import changelogReview from '../actions/changelog.review';
+import changelogUpdate from '../actions/changelog.update';
+import Config from '../config';
+import {exit, getChangelogPath, getPackage, getRepositoryPath} from '../utils';
+import command from './command';
 
 /* MAIN */
 
-const changelog = async (): Promise<void> => {
+const changelog = async ( create: boolean = Config.changelog.create, review: boolean = Config.changelog.review ): Promise<boolean> => {
 
-  const repoPath = await Utils.repository.getPath ();
-  const version = await Utils.repository.getVersion ( repoPath );
+  /* INITIALIZATION */
 
-  if ( !repoPath || !version ) return Utils.exit ( '[changelog] Unsupported repository' );
+  const pkg = getPackage ();
+  const repoPath = getRepositoryPath ();
 
-  await Utils.script.run ( 'prechangelog' );
+  if ( !pkg || !repoPath ) return exit ( 'Unsupported repository' );
 
-  Utils.log ( 'Updating the changelog...' );
+  const changelogPath = getChangelogPath ( repoPath, !create );
 
-  await Changelog.update ( repoPath, version );
+  if ( !changelogPath ) return true;
 
-  await Utils.script.run ( 'postchangelog' );
+  /* COMMAND */
 
-  if ( Config.changelog.open ) {
+  const result = await command ({
+    name: 'changelog',
+    start: 'Updating the changelog...',
+    success: 'Changelog updated successfully',
+    error: 'Changelog update failed',
+    run: async () => {
+      await changelogCreate ( changelogPath );
+      await changelogUpdate ( changelogPath );
+    }
+  });
 
-    await Changelog.open ( repoPath );
+  if ( !result || !review ) return result;
 
-  }
+  await changelogReview ( changelogPath );
+
+  return true;
 
 };
 

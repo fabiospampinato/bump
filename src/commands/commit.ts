@@ -1,25 +1,32 @@
 
 /* IMPORT */
 
-import Commit from '~/providers/commit/git';
-import Utils from '~/utils';
+import commitGit from '../actions/commit.git';
+import {exit, getPackage, getRepositoryPath} from '../utils';
+import command from './command';
 
 /* MAIN */
 
-const commit = async (): Promise<void> => {
+const commit = async (): Promise<boolean> => {
 
-  const repoPath = await Utils.repository.getPath ();
-  const version = await Utils.repository.getVersion ( repoPath );
+  /* INITIALIZATION */
 
-  if ( !repoPath || !version ) return Utils.exit ( '[commit] Unsupported repository' );
+  const pkg = getPackage ();
+  const repoPath = getRepositoryPath ();
 
-  await Utils.script.run ( 'precommit' );
+  if ( !pkg || !repoPath ) return exit ( 'Unsupported repository' );
 
-  Utils.log ( 'Making the commit...' );
+  /* COMMAND */
 
-  await Commit.do ( repoPath, version );
-
-  await Utils.script.run ( 'postcommit' );
+  return command ({
+    name: 'commit',
+    start: 'Making the commit...',
+    success: 'Commit made successfully',
+    error: 'Commit failed',
+    run: () => {
+      return commitGit ( pkg, repoPath );
+    }
+  });
 
 };
 
