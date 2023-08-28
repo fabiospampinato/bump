@@ -13,7 +13,7 @@ const defaults = (): Config => ({
     enabled: true,
     create: false,
     review: true,
-    path: 'CHANGELOG.md', //TODO: use this
+    path: 'CHANGELOG.md',
     version: '### Version [version]',
     commit: '- [message]'
   },
@@ -33,6 +33,7 @@ const defaults = (): Config => ({
       draft: true,
       prerelease: false,
       files: <string[]> [],
+      filesNr: -1,
       token: '',
       owner: '',
       repo: ''

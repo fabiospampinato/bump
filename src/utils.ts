@@ -5,8 +5,10 @@ import findUp from 'find-up-json';
 import {spawn} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import pomerge from 'plain-object-merge';
+import {setTimeout as delay} from 'node:timers/promises';
 import * as prask from 'prask';
+import readdir from 'tiny-readdir';
+import zeptomatch from 'zeptomatch';
 import Config from './config';
 import type {ReleaseType} from 'semver';
 import type {Package, TokensCommit, TokensVersion, Commit, CommitsGroup} from './types';
@@ -80,6 +82,61 @@ const getChangelogPath = ( rootPath: string, checkExistence: boolean ): string |
   if ( checkExistence ) return;
 
   return paths[0];
+
+};
+
+const getChangelogSection = ( rootPath: string, index: number ): string | undefined => {
+
+  const sections = getChangelogSections ( rootPath );
+  const section = sections?.[index];
+
+  return section;
+
+};
+
+const getChangelogSections = ( rootPath: string ): string[] | undefined => {
+
+  const changelogPath = getChangelogPath ( rootPath, false );
+
+  if ( !changelogPath ) return;
+
+  const exists = fs.existsSync ( changelogPath );
+
+  if ( !exists ) return;
+
+  const content = fs.readFileSync ( changelogPath, 'utf8' );
+  const sectionRe = /\n\n([^]*?)\n\n/g; //FIXME: This is too brittle, it doesnt' account for custom sections
+  const sections = [...content.matchAll ( sectionRe )].map ( match => match[1].trim () );
+
+  return sections;
+
+};
+
+const getFilesForGlobs = ( rootPath: string, globs: string[], expected: number = -1, maxAttempts: number = 1 ): Promise<string[]> => {
+
+  const junkRe = /([\\/])(?:__MACOSX|\._[^\\/]*|\.AppleDouble|Desktop\.ini|\.#[^\\/]*|\.DS_Store|ehthumbs\.db|Icon\r|\.LSOverride|\.git|node_modules|\.Spotlight-V100[^\\/]*|Thumbs\.db|\.Trashes|[^\\/]+\.\d{4,}|[^\\/]+\.tmp-\d{10}[a-f0-9]{6}|[^\\/]+~|##)(?:\1|$)/i;
+  const isJunk = ( filePath: string ) => junkRe.test ( filePath );
+  const isMatch = ( filePath: string ) => zeptomatch ( globs, filePath );
+
+  return new Promise ( async ( resolve, reject ) => {
+
+    while ( true ) {
+
+      const {files} = await readdir ( rootPath, { ignore: isJunk } );
+      const filesForGlobs = files.filter ( isMatch );
+      const isExpected = ( expected === -1 || filesForGlobs.length === expected );
+
+      if ( isExpected ) return resolve ( filesForGlobs );
+
+      maxAttempts -= 1;
+
+      if ( maxAttempts <= 0 ) return reject ( new Error ( `Expected to find ${expected} files, but found ${filesForGlobs.length}` ) );
+
+      await delay ( 1000 ); //TODO: Maybe this should be configurable
+
+    }
+
+  });
 
 };
 
@@ -271,12 +328,6 @@ const log = ( message: unknown ): void => {
 
 };
 
-const merge = <T> ( objects: object[] ): T => {
-
-  return pomerge ( objects ) as T;
-
-};
-
 const shell = async ( command: string, args: string[] = [], options: SpawnOptions = {} ): Promise<string> => {
 
   return new Promise ( ( resolve, reject ) => {
@@ -307,4 +358,4 @@ const shell = async ( command: string, args: string[] = [], options: SpawnOption
 
 /* EXPORT */
 
-export {attempt, castError, exit, format, formatDate, getChangelogPath, getPackage, getPackagePath, getPackageVersionAtCommit, getRepositoryPath, getRepositoryCommits, getRepositoryCommitsGroups, getRepositoryCommitsPending, getTokensForCommit, getTokensForVersion, isError, isObject, isString, isUndefined, isVersionIncrement, last, log, merge, shell};
+export {attempt, castError, exit, format, formatDate, getChangelogPath, getChangelogSection, getChangelogSections, getFilesForGlobs, getPackage, getPackagePath, getPackageVersionAtCommit, getRepositoryPath, getRepositoryCommits, getRepositoryCommitsGroups, getRepositoryCommitsPending, getTokensForCommit, getTokensForVersion, isError, isObject, isString, isUndefined, isVersionIncrement, last, log, shell};

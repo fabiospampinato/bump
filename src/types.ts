@@ -12,7 +12,7 @@ type Command = {
   start: string,
   success: string,
   error: string,
-  run: () => Promise<void> | void
+  run: ( log: ( message: string ) => void ) => Promise<void> | void
 };
 
 type Commit = {
@@ -57,6 +57,7 @@ type Config = {
       draft: boolean,
       prerelease: boolean,
       files: string[],
+      filesNr: number,
       token: string,
       owner: string,
       repo: string

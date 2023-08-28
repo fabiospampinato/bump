@@ -23,8 +23,8 @@ const release = async (): Promise<boolean> => {
     start: 'Releasing to GitHub...',
     success: 'Released to GitHub successfully',
     error: 'Release to GitHub failed',
-    run: () => {
-      return releaseGithub ( pkg, repoPath );
+    run: update => {
+      return releaseGithub ( pkg, repoPath, update );
     }
   });
 

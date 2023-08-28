@@ -24,7 +24,7 @@ const action = async ( command: Command ): Promise<boolean> => {
 
   try {
 
-    await command.run ();
+    await command.run ( spinner.update );
 
     spinner.success ( command.success );
 

@@ -30,7 +30,9 @@
     "specialist": "^1.3.0",
     "tiny-colors": "^2.1.2",
     "tiny-open": "^1.0.0",
-    "tiny-spinner": "^2.0.3"
+    "tiny-readdir": "^2.2.0",
+    "tiny-spinner": "^2.0.3",
+    "zeptomatch": "^1.1.3"
   },
   "devDependencies": {
     "@types/node": "^20.5.7",
