@@ -1,29 +1,17 @@
 {
   "name": "@fabiospampinato/bump",
+  "repository": "github:fabiospampinato/bump",
   "description": "Bump updates the project's version, updates/creates the changelog, makes the bump commit, tags the bump commit and makes the release to GitHub. Opinionated but configurable.",
   "version": "2.1.2",
-  "bin": {
-    "bump": "dist/src/bin/index.js"
-  },
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "type": "module",
+  "bin": "dist/bin.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "clean": "rimraf dist",
-    "compile": "tsc --skipLibCheck && tstei",
-    "compile:watch": "tsc --skipLibCheck --watch",
-    "prepublishOnly": "npm run clean && npm run compile"
-  },
-  "bugs": {
-    "url": "https://github.com/fabiospampinato/bump/issues"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "Fabio Spampinato",
-    "email": "spampinabio@gmail.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fabiospampinato/bump.git"
+    "clean": "tsex clean",
+    "compile": "tsex compile",
+    "compile:watch": "tsex compile --watch",
+    "prepublishOnly": "tsex prepare"
   },
   "keywords": [
     "bump",
@@ -35,33 +23,21 @@
     "release"
   ],
   "dependencies": {
-    "@octokit/rest": "16.25.0",
-    "caporal": "https://github.com/fabiospampinato/Caporal.js#cf0f5eeefb2e04cc07798bf4a45d6bda5e2a2f63",
-    "chokidar": "^3.3.1",
-    "execa": "^1.0.0",
-    "find-up": "^2.1.0",
-    "git-username": "^1.0.0",
-    "inquirer-helpers": "^1.3.5",
-    "lodash": "^4.17.4",
-    "mime-types": "^2.1.21",
-    "minimist": "^1.2.0",
-    "mkdirp": "^0.5.1",
-    "moment": "^2.19.3",
-    "opn": "^5.4.0",
-    "pify": "^3.0.0",
-    "promise-resolve-timeout": "^1.2.0",
-    "semver": "^5.4.1",
-    "simple-git": "^1.77.0",
-    "specialist": "^0.3.0",
-    "string-matches": "^1.1.3",
-    "touch": "^3.1.0",
-    "window-size": "^1.1.1"
+    "find-up-json": "^2.0.2",
+    "plain-object-merge": "^2.0.1",
+    "prask": "^2.1.0",
+    "semver": "^7.5.4",
+    "specialist": "^1.3.0",
+    "tiny-colors": "^2.1.2",
+    "tiny-open": "^1.0.0",
+    "tiny-readdir": "^2.2.0",
+    "tiny-spinner": "^2.0.3",
+    "zeptomatch": "^1.1.3"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.119",
-    "@types/node": "^10.9.4",
-    "rimraf": "^2.6.3",
-    "typescript": "^3.7.5",
-    "typescript-transform-export-interop": "^1.0.2"
+    "@types/node": "^20.5.7",
+    "@types/semver": "^7.5.1",
+    "tsex": "^3.0.1",
+    "typescript": "^5.2.2"
   }
 }

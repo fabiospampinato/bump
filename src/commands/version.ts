@@ -1,116 +1,74 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
-import Prompt from 'inquirer-helpers';
-import * as minimist from 'minimist';
-import * as semver from 'semver';
-import {color} from 'specialist';
-import Config from '../config';
-import Utils from '../utils';
+import * as prask from 'prask';
+import semver from 'semver';
+import versionPackage from '../actions/version.package';
+import versionPackageLock from '../actions/version.package_lock';
+import {exit, getPackage, getRepositoryPath, getRepositoryCommitsPending, isVersionIncrement} from '../utils';
+import command from './command';
 
-/* VERSION */
+/* MAIN */
 
-async function version () {
+const version = async ( version?: string | null ): Promise<boolean> => {
 
-  /* CHECKS */
+  /* INITIALIZATION */
 
-  const repoPath = await Utils.repository.getPath ();
+  const pkg = getPackage ();
+  const repoPath = getRepositoryPath ();
 
-  if ( !repoPath ) return Utils.exit ( '[version] Unsupported repository' );
+  if ( !pkg || !repoPath ) return exit ( 'Unsupported repository' );
 
-  const providers = await Utils.repository.getVersionProviders ( repoPath );
+  /* VERSION SELECTION */
 
-  if ( !providers.length ) return Utils.exit ( '[version] Unsupported repository' );
+  version ||= await prask.select ({ message: 'Select an increment:', options: ['major', 'minor', 'patch', 'manual'] });
 
-  /* NEXT */
+  if ( version === 'manual' ) {
 
-  const argv = minimist ( process.argv.slice ( 2 ) ),
-        commands = ['version', 'changelog', 'commit', 'tag', 'release'],
-        increments = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease', 'custom'];
-
-  let next = argv._[1] || argv._[0],
-      increment,
-      version;
-
-  if ( next && !commands.includes ( next ) ) {
-
-    if ( increments.includes ( next ) ) {
-
-      increment = next;
-
-    } else if ( /^(\d|v\d)/.test ( next ) ) {
-
-      increment = 'custom';
-      version = next;
-
-    } else {
-
-      return Utils.exit ( `[version] Invalid version number or version increment: "${color.bold ( next )}"` );
-
-    }
+    version = await prask.string ({ message: 'Enter a version:', required: true });
 
   }
 
-  if ( !version ) {
+  if ( !version ) return false;
 
-    if ( !increment ) {
+  if ( isVersionIncrement ( version ) ) {
 
-      const increments = Config.version.increments;
+    version = semver.inc ( pkg.version, version );
 
-      if ( !increments.length ) return Utils.exit ( '[version] You have to explicitly provide a version number when no increments are enabled' );
+  } else {
 
-      increment = await Prompt.list ( 'Select an increment:', increments );
-
-    }
-
-    if ( increment === 'custom' ) {
-
-      version = await Prompt.input ( 'Enter a version:' );
-
-    }
+    version = semver.coerce ( version )?.version;
 
   }
 
-  if ( version ) {
+  if ( !version ) return exit ( 'Invalid version increment' );
 
-    const original = version;
+  /* NO CHANGES CHECK */
 
-    version = _.trimStart ( version, 'v' ); // In order to support things like `v2`
+  const pending = await getRepositoryCommitsPending ();
 
-    if ( !semver.valid ( version ) ) {
+  if ( !pending.length ) {
 
-      version = semver.coerce ( version );
+    const confirmation = await prask.toggle ({ message: 'No changes detected, bump anyway?' });
 
-      if ( !version ) return Utils.exit ( `[version] Invalid version number: "${color.bold ( original )}"` );
+    if ( !confirmation ) return false;
 
-      version = version.version;
+  }
 
+  /* COMMAND */
+
+  return command ({
+    name: 'version',
+    start: 'Bumping the version...',
+    success: `Version bumped to "${version}" successfully`,
+    error: 'Version bump failed',
+    run: () => {
+      versionPackage ( pkg, repoPath, version! ); //TSC
+      versionPackageLock ( pkg, repoPath, version! ); //TSC
     }
+  });
 
-  }
-
-  /* NO CHANGES */
-
-  const bumps = await Utils.repository.getVersionProvidersResult ( repoPath, 'getCommitsBumps', 1 );
-
-  if ( ( !bumps || !bumps.length || ( bumps.length === 1 && !bumps[0].commits.length ) ) && !Config.force ) { // No changes
-
-    if ( !await Prompt.noYes ( 'No changes detected, bump anyway?' ) ) return process.exit ();
-
-  }
-
-  /* BUMP */
-
-  Utils.log ( 'Bumping the version...' );
-
-  await Utils.script.run ( 'prebump' );
-
-  await Promise.all ( providers.map ( provider => provider.bump ( increment, version ) ) );
-
-  await Utils.script.run ( 'postbump' );
-
-}
+};
 
 /* EXPORT */
 

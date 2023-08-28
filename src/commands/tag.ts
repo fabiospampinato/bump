@@ -1,27 +1,34 @@
 
 /* IMPORT */
 
-import Tag from '../providers/tag/git';
-import Utils from '../utils';
+import tagGit from '../actions/tag.git';
+import {exit, getPackage, getRepositoryPath} from '../utils';
+import command from './command';
 
-/* TAG */
+/* MAIN */
 
-async function tag () {
+const tag = async (): Promise<boolean> => {
 
-  const repoPath = await Utils.repository.getPath (),
-        version = await Utils.repository.getVersion ( repoPath );
+  /* INITIALIZATION */
 
-  if ( !repoPath || !version ) return Utils.exit ( '[tag] Unsupported repository' );
+  const pkg = getPackage ();
+  const repoPath = getRepositoryPath ();
 
-  await Utils.script.run ( 'pretag' );
+  if ( !pkg || !repoPath ) return exit ( 'Unsupported repository' );
 
-  Utils.log ( 'Tagging the commit...' );
+  /* COMMAND */
 
-  await Tag.add ( repoPath, version );
+  return command ({
+    name: 'tag',
+    start: 'Tagging the commit...',
+    success: 'Commit tagged successfully',
+    error: 'Commit tagging failed',
+    run: () => {
+      return tagGit ( pkg, repoPath );
+    }
+  });
 
-  await Utils.script.run ( 'posttag' );
-
-}
+};
 
 /* EXPORT */
 
