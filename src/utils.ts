@@ -104,9 +104,14 @@ const getChangelogSections = ( rootPath: string ): string[] | undefined => {
 
   if ( !exists ) return;
 
-  const content = fs.readFileSync ( changelogPath, 'utf8' );
-  const sectionRe = /\n\n([^]*?)\n\n/g; //FIXME: This is too brittle, it doesnt' account for custom sections
-  const sections = [...content.matchAll ( sectionRe )].map ( match => match[1].trim () );
+  const changelogContent = fs.readFileSync ( changelogPath, 'utf8' );
+
+  const versionPrefixRe = /^(#+\s)/m; //FIXME: This assumes versions start with "#", which technically may not always be true
+  const versionPrefixMatch = changelogContent.match ( versionPrefixRe );
+  const versionPrefix = versionPrefixMatch ? versionPrefixMatch[1] : '### ';
+
+  const sectionRe = new RegExp ( `^${versionPrefix}.*([^]*?)(?=${versionPrefix}|(?![^]))`, 'gm' );
+  const sections = [...changelogContent.matchAll ( sectionRe )].map ( match => match[1].trim () );
 
   return sections;
 
