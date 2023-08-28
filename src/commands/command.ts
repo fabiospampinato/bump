@@ -8,7 +8,7 @@ import type {Command} from '../types';
 
 /* MAIN */
 
-const action = async ( command: Command ): Promise<boolean> => {
+const command = async ( command: Command ): Promise<boolean> => {
 
   /* PRE SCRIPT */
 
@@ -52,4 +52,4 @@ const action = async ( command: Command ): Promise<boolean> => {
 
 /* EXPORT */
 
-export default action;
+export default command;

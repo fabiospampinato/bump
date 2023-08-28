@@ -106,7 +106,7 @@ const getChangelogSections = ( rootPath: string ): string[] | undefined => {
 
   const changelogContent = fs.readFileSync ( changelogPath, 'utf8' );
 
-  const versionPrefixRe = /^(#+\s)/m; //FIXME: This assumes versions start with "#", which technically may not always be true
+  const versionPrefixRe = /^(#+\s)/m; //FIXME: This assumes versions start with "#", which technically may not always be true, and that a version line is the first header line, which is also not always true
   const versionPrefixMatch = changelogContent.match ( versionPrefixRe );
   const versionPrefix = versionPrefixMatch ? versionPrefixMatch[1] : '### ';
 

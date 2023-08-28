@@ -1,7 +1,7 @@
 
 /* HELPERS */
 
-type DeepPartial<T extends object> = T extends unknown[] ? T : { [Key in keyof T]?: DeepPartial<T[Key]> };
+type DeepPartial<T> = T extends unknown[] ? T : { [Key in keyof T]?: DeepPartial<T[Key]> };
 
 type ScriptName = `pre${Command['name']}` | `post${Command['name']}`;
 
@@ -12,7 +12,7 @@ type Command = {
   start: string,
   success: string,
   error: string,
-  run: ( log: ( message: string ) => void ) => Promise<void> | void
+  run: ( update: ( message: string ) => void ) => Promise<void> | void
 };
 
 type Commit = {

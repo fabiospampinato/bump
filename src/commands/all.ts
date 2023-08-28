@@ -1,12 +1,12 @@
 
 /* IMPORT */
 
+import Config from '../config';
 import version from './version';
 import changelog from './changelog';
 import commit from './commit';
 import tag from './tag';
 import release from './release';
-import Config from '../config';
 
 /* MAIN */
 
