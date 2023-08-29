@@ -10,7 +10,6 @@ import * as prask from 'prask';
 import readdir from 'tiny-readdir';
 import zeptomatch from 'zeptomatch';
 import Config from './config';
-import type {ReleaseType} from 'semver';
 import type {Package, TokensCommit, TokensVersion, Commit, CommitsGroup} from './types';
 import type {SpawnOptions} from 'node:child_process';
 
@@ -315,9 +314,9 @@ const isUndefined = ( value: unknown ): value is undefined => {
 
 };
 
-const isVersionIncrement = ( version: string ): version is ReleaseType => {
+const isVersionIncrement = ( version: string ): version is 'major' | 'minor' | 'patch' => {
 
-  return /^(major|minor|patch|premajor|preminor|prepatch|prerelease)$/.test ( version );
+  return ( version === 'major' || version === 'minor' || version === 'patch' );
 
 };
 
@@ -331,6 +330,61 @@ const log = ( message: unknown ): void => {
 
   console.log ();
   console.log ( message );
+
+};
+
+const semverCoerce = ( version: string ): string | undefined => {
+
+  const semver = semverParse ( version );
+
+  if ( !semver ) return;
+
+  return `${semver.major}.${semver.minor}.${semver.patch}${semver.suffix}`;
+
+};
+
+const semverInc = ( version: string, increment: 'major' | 'minor' | 'patch' ): string | undefined => {
+
+  const semver = semverParse ( version );
+
+  if ( !semver ) return;
+
+  semver.suffix = '';
+
+  if ( increment === 'major' ) {
+
+    semver.major += 1;
+    semver.minor = 0;
+    semver.patch = 0;
+
+  } else if ( increment === 'minor' ) {
+
+    semver.minor += 1;
+    semver.patch = 0;
+
+  } else if ( increment === 'patch' ) {
+
+    semver.patch += 1;
+
+  }
+
+  return `${semver.major}.${semver.minor}.${semver.patch}${semver.suffix}`;
+
+};
+
+const semverParse = ( version: string ): { major: number, minor: number, patch: number, suffix: string } | undefined => {
+
+  const re = /(\d+)(?:\.(\d+))?(?:\.(\d+))?(-[a-z]+(?:\.\d+))?/;
+  const match = version.match ( re );
+
+  if ( !match ) return;
+
+  const major = Number ( match[1] );
+  const minor = Number ( match[2] || 0 );
+  const patch = Number ( match[3] || 0 );
+  const suffix = match[4] || '';
+
+  return { major, minor, patch, suffix };
 
 };
 
@@ -364,4 +418,4 @@ const shell = async ( command: string, args: string[] = [], options: SpawnOption
 
 /* EXPORT */
 
-export {attempt, castError, exit, format, formatDate, getChangelogPath, getChangelogSection, getChangelogSections, getFilesForGlobs, getPackage, getPackagePath, getPackageVersionAtCommit, getRepositoryPath, getRepositoryCommits, getRepositoryCommitsGroups, getRepositoryCommitsPending, getTokensForCommit, getTokensForVersion, isError, isObject, isString, isUndefined, isVersionIncrement, last, log, shell};
+export {attempt, castError, exit, format, formatDate, getChangelogPath, getChangelogSection, getChangelogSections, getFilesForGlobs, getPackage, getPackagePath, getPackageVersionAtCommit, getRepositoryPath, getRepositoryCommits, getRepositoryCommitsGroups, getRepositoryCommitsPending, getTokensForCommit, getTokensForVersion, isError, isObject, isString, isUndefined, isVersionIncrement, last, log, semverCoerce, semverInc, semverParse, shell};

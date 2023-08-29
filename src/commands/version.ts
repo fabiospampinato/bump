@@ -2,10 +2,9 @@
 /* IMPORT */
 
 import * as prask from 'prask';
-import semver from 'semver';
 import versionPackage from '../actions/version.package';
 import versionPackageLock from '../actions/version.package_lock';
-import {exit, getPackage, getRepositoryPath, getRepositoryCommitsPending, isVersionIncrement} from '../utils';
+import {exit, getPackage, getRepositoryPath, getRepositoryCommitsPending, isVersionIncrement, semverCoerce, semverInc} from '../utils';
 import command from './command';
 
 /* MAIN */
@@ -33,11 +32,11 @@ const version = async ( version?: string | null ): Promise<boolean> => {
 
   if ( isVersionIncrement ( version ) ) {
 
-    version = semver.inc ( pkg.version, version );
+    version = semverInc ( pkg.version, version );
 
   } else {
 
-    version = semver.coerce ( version )?.version;
+    version = semverCoerce ( version );
 
   }
 

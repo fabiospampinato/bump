@@ -26,7 +26,6 @@
     "find-up-json": "^2.0.2",
     "plain-object-merge": "^2.0.1",
     "prask": "^2.1.0",
-    "semver": "^7.5.4",
     "specialist": "^1.3.0",
     "tiny-colors": "^2.1.2",
     "tiny-open": "^1.0.0",
@@ -36,7 +35,6 @@
   },
   "devDependencies": {
     "@types/node": "^20.5.7",
-    "@types/semver": "^7.5.1",
     "tsex": "^3.0.1",
     "typescript": "^5.2.2"
   }
