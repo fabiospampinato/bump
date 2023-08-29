@@ -28,6 +28,7 @@ const releaseGithub = async ( pkg: Package, repoPath: string, update: ( message:
 
   const tokens = getTokensForVersion ( pkg.version );
   const tag = format ( Config.tag.name, tokens );
+  const title = format ( config.title, tokens );
   const body = getChangelogSection ( repoPath, 0 );
 
   const response = await fetch ( releaseUrl, {
@@ -37,7 +38,7 @@ const releaseGithub = async ( pkg: Package, repoPath: string, update: ( message:
       'Content-Type': 'application/json'
     },
     body: JSON.stringify ({
-      name: tag,
+      name: title,
       tag_name: tag,
       body,
       draft: config.draft,

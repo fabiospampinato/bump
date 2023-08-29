@@ -34,6 +34,7 @@ const defaults = (): Config => ({
       prerelease: false,
       files: <string[]> [],
       filesNr: -1,
+      title: 'v[version]',
       token: '',
       owner: '',
       repo: ''

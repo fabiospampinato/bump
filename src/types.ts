@@ -58,6 +58,7 @@ type Config = {
       prerelease: boolean,
       files: string[],
       filesNr: number,
+      title: string,
       token: string,
       owner: string,
       repo: string
