@@ -17,6 +17,7 @@ bin ( 'bump', 'Update your project\'s version, and more' )
   .usage ( `bump ${color.magenta ( 'release' )} ${color.green ( '--prerelease' )} ${color.blue ( '"npm run build"' )} ${color.green ( '--postrelease' )} ${color.blue ( '"npm publish"' )}` )
   /* DEFAULT COMMAND */
   .option ( '--config, -c <path|object>', 'Path to configuration file or plain JSON object' )
+  .option ( '--force', 'Force the command, without asking for confirmation' )
   .option ( '--no-scripts', 'Disable pre and post scripts' )
   .option ( '--preversion <script>', 'Script to execute before bumping the version' )
   .option ( '--prechangelog <script>', 'Script to execute before updating the changelog' )

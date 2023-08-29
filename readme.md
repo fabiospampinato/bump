@@ -43,6 +43,7 @@ Bump comes with the following default settings:
 
 ```js
 {
+  "force": false, // If "true" it will not ask the user for confirmation
   "version": {
     "enabled": true // Bump the version number
   },

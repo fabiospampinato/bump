@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import * as prask from 'prask';
 import open from 'tiny-open';
+import Config from '../config';
 
 /* MAIN */
 
@@ -15,7 +16,7 @@ const changelogReview = async ( changelogPath: string ): Promise<void> => {
 
   open ( changelogPath );
 
-  const confirmation = await prask.toggle ({ message: 'Review the changelog. Can we continue now?' });
+  const confirmation = Config.force || await prask.toggle ({ message: 'Review the changelog. Can we continue now?' });
 
   if ( confirmation ) return;
 

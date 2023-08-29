@@ -6,6 +6,7 @@ import type {Config} from '../types';
 /* MAIN */
 
 const defaults = (): Config => ({
+  force: false,
   version: {
     enabled: true
   },

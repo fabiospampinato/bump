@@ -13,6 +13,12 @@ const options = (): DeepPartial<Config> => {
 
   optionsConfig.scripts = {};
 
+  if ( argv['force'] === true ) {
+
+    optionsConfig.force = true;
+
+  }
+
   if ( argv['scripts'] === false ) {
 
     optionsConfig.scripts.enabled = false;

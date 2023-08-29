@@ -30,6 +30,7 @@ type CommitsGroup = {
 };
 
 type Config = {
+  force: boolean,
   version: {
     enabled: boolean
   },

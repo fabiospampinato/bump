@@ -4,6 +4,7 @@
 import * as prask from 'prask';
 import versionPackage from '../actions/version.package';
 import versionPackageLock from '../actions/version.package_lock';
+import Config from '../config';
 import {exit, getPackage, getRepositoryPath, getRepositoryCommitsPending, isVersionIncrement, semverCoerce, semverInc} from '../utils';
 import command from './command';
 
@@ -48,7 +49,7 @@ const version = async ( version?: string | null ): Promise<boolean> => {
 
   if ( !pending.length ) {
 
-    const confirmation = await prask.toggle ({ message: 'No changes detected, bump anyway?' });
+    const confirmation = Config.force || await prask.toggle ({ message: 'No changes detected, bump anyway?' });
 
     if ( !confirmation ) return false;
 
