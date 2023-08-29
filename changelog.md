@@ -1,3 +1,6 @@
+### Version 3.0.0
+- Rewritten, deleted almost all third-party dependencies, more opinionated, simpler, faster
+
 ### Version 2.1.2
 - Lowercased readme file
 - Lowercased changelog file
