@@ -1,3 +1,6 @@
+### Version 3.2.0
+- Added a "--force" option, for disabling confirmation props
+
 ### Version 3.1.0
 - Added support for customizing the release title on github
 
