@@ -1,3 +1,6 @@
+### Version 3.0.1
+- Removed semver dependency
+
 ### Version 3.0.0
 - Rewritten, deleted almost all third-party dependencies, more opinionated, simpler, faster
 
