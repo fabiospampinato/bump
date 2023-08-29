@@ -1,3 +1,6 @@
+### Version 3.1.0
+- Added support for customizing the release title on github
+
 ### Version 3.0.1
 - Removed semver dependency
 
