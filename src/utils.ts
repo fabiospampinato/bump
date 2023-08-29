@@ -205,8 +205,9 @@ const getRepositoryPath = (): string | undefined => {
 
 const getRepositoryCommits = async (): Promise<Commit[]> => { // From oldest to newest
 
-  const log = await shell ( 'git', ['log', '-n', `${100_000}`, `--pretty=format:{ "author_email": "%aE", "author_name": "%aN", "date": "%aD", "hash": "%H", "message": "%s" }` ]);
-  const commits = log.split ( /\r\n?|\n/g ).filter ( Boolean ).map ( commit => JSON.parse ( commit ) ).reverse ();
+  const log = await shell ( 'git', ['log', '-n', `${100_000}`, `--pretty=format:%aE^^^^%aN^^^^%aD^^^^%H^^^^%s` ]);
+  const rows = log.split ( /\r\n?|\n/g ).filter ( Boolean ).map ( row => row.split ( '^^^^' ) );
+  const commits = rows.map ( ([ author_email, author_name, date, hash, message ]) => ({ author_email, author_name, date, hash, message }) ).reverse ();
 
   return commits;
 
