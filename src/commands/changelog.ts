@@ -31,7 +31,8 @@ const changelog = async ( create: boolean = Config.changelog.create, review: boo
     success: 'Changelog updated successfully',
     error: 'Changelog update failed',
     run: async () => {
-      await changelogCreate ( changelogPath );
+      const created = await changelogCreate ( changelogPath );
+      if ( created ) return;
       await changelogUpdate ( changelogPath );
     }
   });
