@@ -202,9 +202,9 @@ const getRepositoryPath = (): string | undefined => {
 
 };
 
-const getRepositoryCommits = async (): Promise<Commit[]> => { // From oldest to newest
+const getRepositoryCommits = async ( withFile?: string ): Promise<Commit[]> => { // From oldest to newest
 
-  const log = await shell ( 'git', ['log', '-n', `${100_000}`, `--pretty=format:%aE^^^^%aN^^^^%aD^^^^%H^^^^%s` ]);
+  const log = await shell ( 'git', ['log', '-n', `${100_000}`, `--pretty=format:%aE^^^^%aN^^^^%aD^^^^%H^^^^%s`, ...( withFile ? ['--', withFile] : [] ) ]);
   const rows = log.split ( /\r\n?|\n/g ).filter ( Boolean ).map ( row => row.split ( '^^^^' ) );
   const commits = rows.map ( ([ author_email, author_name, date, hash, message ]) => ({ author_email, author_name, date, hash, message }) ).reverse ();
 
@@ -215,14 +215,24 @@ const getRepositoryCommits = async (): Promise<Commit[]> => { // From oldest to 
 const getRepositoryCommitsGroups = async (): Promise<CommitsGroup[]> => { // From oldest to newest
 
   const commits = await getRepositoryCommits ();
+  const commitsWithPackage = await getRepositoryCommits ( 'package.json' );
+  const versions: Partial<Record<string, string>> = {};
   const groups: CommitsGroup[] = [];
+
+  for ( let i = 0, l = commitsWithPackage.length; i < l; i++ ) {
+
+    const version = await getPackageVersionAtCommit ( commitsWithPackage[i].hash );
+
+    versions[commitsWithPackage[i].hash] = version;
+
+  }
 
   let versionPrev = '';
   let versionPrevIndex = -1;
 
   for ( let i = 0, l = commits.length; i < l; i++ ) {
 
-    const version = await getPackageVersionAtCommit ( commits[i].hash ); //TODO: This could be pretty slow, maybe there's a better way to do it (binary searching bump commits? filtering out commits that didn't change package.json?)
+    const version = versions[commits[i].hash] || versionPrev;
 
     if ( !version ) continue;
 
