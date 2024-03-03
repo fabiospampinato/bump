@@ -187,6 +187,12 @@ const getPackageVersionAtCommit = async ( commit: string ): Promise<string | und
 
 };
 
+const getPackageVersionsAtCommits = async ( commits: string[] ): Promise<(string | undefined)[]> => {
+
+  return Promise.all ( commits.map ( getPackageVersionAtCommit ) );
+
+};
+
 const getRepositoryPath = (): string | undefined => {
 
   const packagePath = getPackagePath ();
@@ -216,14 +222,13 @@ const getRepositoryCommitsGroups = async (): Promise<CommitsGroup[]> => { // Fro
 
   const commits = await getRepositoryCommits ();
   const commitsWithPackage = await getRepositoryCommits ( 'package.json' );
+  const commitsWithPackageVersions = await getPackageVersionsAtCommits ( commitsWithPackage.map ( commit => commit.hash ) );
   const versions: Partial<Record<string, string>> = {};
   const groups: CommitsGroup[] = [];
 
   for ( let i = 0, l = commitsWithPackage.length; i < l; i++ ) {
 
-    const version = await getPackageVersionAtCommit ( commitsWithPackage[i].hash );
-
-    versions[commitsWithPackage[i].hash] = version;
+    versions[commitsWithPackage[i].hash] = commitsWithPackageVersions[i];
 
   }
 
