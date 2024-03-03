@@ -1,3 +1,8 @@
+### Version 3.2.2
+- Changelog: optimized creation, halving the time needed for it
+- Changelog: optimized both creation and updates, by inferring the version only for commits that could have possibly changed it
+- Changelog: optimized both creation and updates, by inferring the version at various commits concurrently
+
 ### Version 3.2.1
 - Avoiding relying on node:timers
 
