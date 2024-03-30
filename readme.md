@@ -144,10 +144,6 @@ The following tokens are available for changelog commits:
 - **Changelogs**: Changelogs are cool, if your existing project doesn't have one simply run `bump changelog` to generate it.
 - **Scripts**: Scripts can be used for building/testing/deployments/etc. For example: a `preversion` script could be used for running tests, a `postversion` script could be used for compiling your project for production, a `postcommit` script could be used for pushing the commit to origin.
 
-## Related
-
-- **[vscode-bump](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-bump)**: Extension for Visual Studio Code for interacting with Bump directly from your editor.
-
 ## License
 
 MIT © Fabio Spampinato
