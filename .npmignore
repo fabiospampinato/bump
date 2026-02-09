@@ -1,0 +1,7 @@
+resources
+src
+tasks
+test
+
+.editorconfig
+tsconfig.json
