@@ -73,7 +73,7 @@ Bump comes with the following default settings:
       "files": [], // Globs of files to attach to the release
       "filesNr": -1, // Number of files expected to match the globs, for validation purposes
       "title": "v[version]", // Template for the release title
-      "token": "", // GitHub personal access token with `public_repo` priviledge
+      "token": "", // GitHub personal access token with `public_repo` privilege
       "owner": "", // GitHub repository owner
       "repo": "" // GitHub repository name
     }
