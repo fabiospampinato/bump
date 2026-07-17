@@ -110,7 +110,7 @@ When running `bump` without explicitly providing a command all the enabled ones 
 
 If for instance you don't want to tag your bump commits you can disable the related command by setting `tag.enabled = false`.
 
-All commands except `release` are enabled by default, I recommed you to check if everything is correct, review the changelog manually as some commits shouldn't be put into the changelog, and then make the release manually with `bump release`.
+All commands except `release` are enabled by default, I recommend you to check if everything is correct, review the changelog manually as some commits shouldn't be put into the changelog, and then make the release manually with `bump release`.
 
 ## Templates & Tokens
 

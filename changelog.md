@@ -87,7 +87,7 @@
 
 ### Version 1.0.1
 - Updated package description
-- Less aggressive custom version coersion
+- Less aggressive custom version coercion
 - Improved bump commits algorithm
 - Disabling the `release` command by default
 
