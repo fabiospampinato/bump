@@ -99,7 +99,7 @@ You can override them in multiple ways:
 - **Computer-level settings**: Place your computer-level settings inside `~/.bump.json` to override the default ones. You should put auth tokens there.
 - **repository-level settings**: Place your repository-level settings at the root of your repository in a file named `bump.json`, these settings also override computer-level settings.
 - **Dynamic settings**: You can pass an arbitrary settings object via the `--config` CLI option, these settings have even higher priority.
-- **Dynamic scripts**: Scripts can be provided inline with the command also, like `--preversion "do something"`, these have the highest proprity.
+- **Dynamic scripts**: Scripts can be provided inline with the command also, like `--preversion "do something"`, these have the highest priority.
 - **Environment variables**: the following environment variable is supported too: `BUMP_GITHUB_TOKEN`, if you'd like to provide your token that way.
 
 Check out [cash](https://github.com/kenwheeler/cash)'s [bump.json](https://github.com/kenwheeler/cash/blob/master/bump.json) as an example.
